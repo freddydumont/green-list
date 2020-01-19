@@ -1,4 +1,4 @@
-import { Machine } from 'xstate';
+import { Machine, assign } from 'xstate';
 
 interface FormStateSchema {
   states: {
@@ -11,7 +11,13 @@ interface FormStateSchema {
   };
 }
 
-type FormEvent = { type: 'NEXT' } | { type: 'PREVIOUS' } | { type: 'SUBMIT' };
+type FormEvent =
+  | { type: 'START'; lang: Language }
+  | { type: 'NEXT' }
+  | { type: 'PREVIOUS' }
+  | { type: 'SUBMIT' };
+
+type Language = 'en' | 'fr';
 
 interface User {
   firstName: string;
@@ -42,6 +48,7 @@ interface Availability {
 }
 
 interface FormContext {
+  lang: Language;
   user: User;
   skills: Skills;
   availability: Availability;
@@ -54,7 +61,13 @@ const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
     states: {
       welcome: {
         on: {
-          NEXT: 'info',
+          START: {
+            target: 'info',
+            actions: (context, event) =>
+              assign({
+                lang: event.lang,
+              }),
+          },
         },
       },
       info: {
