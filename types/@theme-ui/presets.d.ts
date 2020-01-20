@@ -1520,6 +1520,7 @@ declare const themeUIPresets: {
       purple: string[];
       red: string[];
       secondary: string;
+      secondaryHover: string;
       success: string;
       teal: string[];
       text: string;
