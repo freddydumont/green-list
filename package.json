@@ -24,7 +24,8 @@
     "next-nprogress-emotion": "^1.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "theme-ui": "^0.2.49"
+    "theme-ui": "^0.2.49",
+    "xstate": "^4.7.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
