@@ -1,6 +1,6 @@
 import { Machine, assign } from 'xstate';
 
-interface FormStateSchema {
+export interface FormStateSchema {
   states: {
     welcome: {};
     info: {};
@@ -11,7 +11,7 @@ interface FormStateSchema {
   };
 }
 
-type FormEvent =
+export type FormEvent =
   | { type: 'START'; lang: Language }
   | { type: 'NEXT' }
   | { type: 'PREVIOUS' }
@@ -47,7 +47,7 @@ interface Availability {
   remote: boolean;
 }
 
-interface FormContext {
+export interface FormContext {
   lang: Language;
   user: User;
   skills: Skills;
@@ -105,9 +105,7 @@ const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
           },
         },
       },
-      confirmation: {
-        type: 'final',
-      },
+      confirmation: {},
     },
   },
   {

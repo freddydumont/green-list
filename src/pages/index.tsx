@@ -1,27 +1,31 @@
 import { Styled } from 'theme-ui';
-import { Button } from '@theme-ui/components';
 import { useMachine } from '@xstate/react';
 import { formMachine } from '../formMachine';
+import NextButton from '../components/NextButton';
 
 export default () => {
-  const [current, send] = useMachine(formMachine);
+  const [current, , service] = useMachine(formMachine, { immediate: true });
+
+  const NextPage = ({ title }: { title: string }) => (
+    <>
+      <Styled.h1>{title}</Styled.h1>
+      <NextButton service={service} />
+    </>
+  );
 
   switch (current.value) {
     case 'welcome':
-      return (
-        <>
-          <Styled.h1>Welcome</Styled.h1>
-          <Button onClick={() => send({ type: 'START', lang: 'en' })}>
-            Continue in English
-          </Button>
-          <Button onClick={() => send({ type: 'START', lang: 'en' })}>
-            Continuer en français
-          </Button>
-        </>
-      );
-
+      return <NextPage title="Welcome" />;
     case 'info':
-      return <Styled.h1>Info</Styled.h1>;
+      return <NextPage title="Info" />;
+    case 'skills':
+      return <NextPage title="Skills" />;
+    case 'availability':
+      return <NextPage title="Availability" />;
+    case 'validation':
+      return <NextPage title="Validation" />;
+    case 'confirmation':
+      return <NextPage title="Confirmation" />;
 
     default:
       return null;
