@@ -2,7 +2,7 @@ import { Machine, assign } from 'xstate';
 
 export interface FormStateSchema {
   states: {
-    welcome: {};
+    home: {};
     info: {};
     skills: {};
     availability: {};
@@ -57,9 +57,9 @@ export interface FormContext {
 const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
   {
     id: 'form',
-    initial: 'welcome',
+    initial: 'home',
     states: {
-      welcome: {
+      home: {
         on: {
           START: {
             target: 'info',

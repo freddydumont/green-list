@@ -14,8 +14,8 @@ export default () => {
   );
 
   switch (current.value) {
-    case 'welcome':
-      return <NextPage title="Welcome" />;
+    case 'home':
+      return <NextPage title="Home" />;
     case 'info':
       return <NextPage title="Info" />;
     case 'skills':

@@ -22,7 +22,7 @@ const NextButton = ({ service }: Props) => {
   );
 
   switch (current.value) {
-    case 'welcome':
+    case 'home':
       return (
         <>
           <Button onClick={() => send({ type: 'START', lang: 'en' })}>
