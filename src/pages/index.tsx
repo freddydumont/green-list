@@ -1,7 +1,7 @@
 import { Styled } from 'theme-ui';
 import { Button } from '@theme-ui/components';
 import { useMachine } from '@xstate/react';
-import { formMachine } from '../src/formMachine';
+import { formMachine } from '../formMachine';
 
 export default () => {
   const [current, send] = useMachine(formMachine);

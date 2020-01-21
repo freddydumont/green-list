@@ -3,8 +3,8 @@ import { ThemeProvider, Styled, ColorMode } from 'theme-ui';
 import { Container } from '@theme-ui/components';
 import NProgress from 'next-nprogress-emotion';
 
-import Header from '../src/components/Header';
-import theme from '../src/theme';
+import Header from '../components/Header';
+import theme from '../theme';
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for
