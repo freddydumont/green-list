@@ -1,6 +1,6 @@
 import { Styled } from 'theme-ui';
 import { Box } from '@theme-ui/components';
-import NextButton from './NextButton';
+import FormNavButton from './NextButton';
 
 interface Props {
   title: string;
@@ -24,7 +24,7 @@ const FormPage = ({ title, description }: Props) => {
           paddingRight: 'inherit',
         }}
       >
-        <NextButton />
+        <FormNavButton />
       </Box>
     </>
   );

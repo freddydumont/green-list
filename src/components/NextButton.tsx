@@ -7,7 +7,7 @@ import { ServiceContext } from '../pages';
  * Button subscribing to the form state that returns the appropriate value
  * for the current state.
  */
-const NextButton = () => {
+const FormNavButton = () => {
   const service = useContext(ServiceContext);
   const [current, send] = useService(service);
 
@@ -72,4 +72,4 @@ const NextButton = () => {
   }
 };
 
-export default NextButton;
+export default FormNavButton;
