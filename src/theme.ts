@@ -1,4 +1,4 @@
-import { tailwind, deep } from '@theme-ui/presets';
+import { tailwind } from '@theme-ui/presets';
 
 const theme = {
   ...tailwind,
@@ -80,9 +80,7 @@ const theme = {
       'hsl(15, 86%, 30%)',
     ],
     modes: {
-      dark: {
-        ...deep.colors,
-      },
+      dark: {},
     },
   },
   layout: {
@@ -134,6 +132,13 @@ theme.colors = {
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
   muted: theme.colors.gray[1],
+  modes: {
+    dark: {
+      background: theme.colors.gray[9],
+      text: theme.colors.gray[0],
+      textMuted: theme.colors.gray[5],
+    },
+  },
 };
 
 theme.buttons.form = {
