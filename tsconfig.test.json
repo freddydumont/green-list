@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // https://testing-library.com/docs/react-testing-library/setup#configuring-jest-with-test-utils
+    "baseUrl": ".",
+    "paths": {
+      // TODO: fix this so that vscode recognizes it
+      "test-utils": ["./utils/test-utils"]
+    }
+  },
+  "include": ["**/*.test.ts", "**/*.test.tsx"]
+}
