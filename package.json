@@ -21,10 +21,11 @@
     "@theme-ui/presets": "^0.2.44",
     "@theme-ui/style-guide": "^0.2.49",
     "@xstate/react": "^0.8.1",
-    "next": "^9.0.2",
+    "next": "^9.2.0",
     "next-nprogress-emotion": "^1.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "tailwindcss": "^1.1.4",
     "theme-ui": "^0.2.49",
     "xstate": "^4.7.6"
   },

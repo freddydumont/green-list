@@ -2,6 +2,7 @@ import App from 'next/app';
 import { ThemeProvider, Styled, ColorMode } from 'theme-ui';
 import { Container } from '@theme-ui/components';
 import NProgress from 'next-nprogress-emotion';
+import 'tailwindcss/dist/base.css';
 
 import Header from '../components/Header';
 import theme from '../theme';
@@ -30,7 +31,7 @@ class MyApp extends App {
           <Container
             sx={{
               position: 'relative',
-              minHeight: 'calc(100vh - 66px - 1rem)',
+              minHeight: 'calc(100vh - 72px)',
             }}
           >
             <Component {...pageProps} />

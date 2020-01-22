@@ -10,7 +10,9 @@ export default function Header() {
       <Flex as="nav">
         {/* passHref is required with NavLink */}
         <Link href="/" passHref>
-          <NavLink p={2}>Home</NavLink>
+          <NavLink p={2} pl={0}>
+            Home
+          </NavLink>
         </Link>
         <Link href="/style" passHref>
           <NavLink p={2}>Style Guide</NavLink>
