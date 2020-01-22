@@ -1,44 +1,63 @@
-import { Styled } from 'theme-ui';
 import { useMachine } from '@xstate/react';
-import { formMachine } from '../formMachine';
-import NextButton from '../components/NextButton';
-import { Box } from '@theme-ui/components';
+import {
+  formMachine,
+  FormContext,
+  FormStateSchema,
+  FormEvent,
+} from '../formMachine';
+import FormPage from '../components/FormPage';
+import { createContext } from 'react';
+import { Interpreter } from 'xstate';
+
+type Service = Interpreter<FormContext, FormStateSchema, FormEvent>;
+
+export const ServiceContext = createContext<Service>({} as Service);
 
 export default () => {
   const [current, , service] = useMachine(formMachine, { immediate: true });
 
-  const Page = ({ title }: { title: string }) => (
-    <>
-      <Styled.h1>{title}</Styled.h1>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 2,
-          right: 2,
-          paddingBottom: 'inherit',
-          paddingRight: 'inherit',
-        }}
-      >
-        <NextButton service={service} />
-      </Box>
-    </>
-  );
+  let page = null;
 
   switch (current.value) {
     case 'home':
-      return <Page title="Home" />;
+      page = <FormPage title="Home" description="this is a test description" />;
+      break;
     case 'info':
-      return <Page title="Info" />;
+      page = <FormPage title="Info" description="this is a test description" />;
+      break;
     case 'skills':
-      return <Page title="Skills" />;
+      page = (
+        <FormPage title="Skills" description="this is a test description" />
+      );
+      break;
     case 'availability':
-      return <Page title="Availability" />;
+      page = (
+        <FormPage
+          title="Availability"
+          description="this is a test description"
+        />
+      );
+      break;
     case 'validation':
-      return <Page title="Validation" />;
+      page = (
+        <FormPage title="Validation" description="this is a test description" />
+      );
+      break;
     case 'confirmation':
-      return <Page title="Confirmation" />;
+      page = (
+        <FormPage
+          title="Confirmation"
+          description="this is a test description"
+        />
+      );
+      break;
 
     default:
-      return null;
+      page = null;
+      break;
   }
+
+  return (
+    <ServiceContext.Provider value={service}>{page}</ServiceContext.Provider>
+  );
 };

@@ -1,18 +1,14 @@
 import { Button } from '@theme-ui/components';
+import { useContext } from 'react';
 import { useService } from '@xstate/react';
-import { Interpreter } from 'xstate';
-import { FormEvent, FormContext, FormStateSchema } from '../formMachine';
-
-interface Props {
-  /** xstate service */
-  service: Interpreter<FormContext, FormStateSchema, FormEvent>;
-}
+import { ServiceContext } from '../pages';
 
 /**
  * Button subscribing to the form state that returns the appropriate value
  * for the current state.
  */
-const NextButton = ({ service }: Props) => {
+const NextButton = () => {
+  const service = useContext(ServiceContext);
   const [current, send] = useService(service);
 
   const next = (
