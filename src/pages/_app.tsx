@@ -27,7 +27,12 @@ class MyApp extends App {
         <Header />
         <NProgress />
         <Styled.root>
-          <Container>
+          <Container
+            sx={{
+              position: 'relative',
+              minHeight: 'calc(100vh - 66px - 1rem)',
+            }}
+          >
             <Component {...pageProps} />
           </Container>
         </Styled.root>

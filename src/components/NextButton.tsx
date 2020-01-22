@@ -15,20 +15,32 @@ interface Props {
 const NextButton = ({ service }: Props) => {
   const [current, send] = useService(service);
 
-  const next = <Button onClick={() => send({ type: 'NEXT' })}>Next</Button>;
+  const next = (
+    <Button variant="form" onClick={() => send({ type: 'NEXT' })}>
+      Next
+    </Button>
+  );
 
   const previous = (
-    <Button onClick={() => send({ type: 'PREVIOUS' })}>Previous</Button>
+    <Button variant="form" onClick={() => send({ type: 'PREVIOUS' })}>
+      Previous
+    </Button>
   );
 
   switch (current.value) {
     case 'home':
       return (
         <>
-          <Button onClick={() => send({ type: 'START', lang: 'en' })}>
+          <Button
+            variant="form"
+            onClick={() => send({ type: 'START', lang: 'en' })}
+          >
             Continue in English
           </Button>
-          <Button onClick={() => send({ type: 'START', lang: 'en' })}>
+          <Button
+            variant="form"
+            onClick={() => send({ type: 'START', lang: 'fr' })}
+          >
             Continuer en français
           </Button>
         </>
@@ -50,7 +62,9 @@ const NextButton = ({ service }: Props) => {
       return (
         <>
           {previous}
-          <Button onClick={() => send({ type: 'SUBMIT' })}>Submit</Button>
+          <Button variant="form" onClick={() => send({ type: 'SUBMIT' })}>
+            Submit
+          </Button>
         </>
       );
 

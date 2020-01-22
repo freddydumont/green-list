@@ -101,6 +101,7 @@ const theme = {
         boxShadow: 'default',
       },
     },
+    form: {},
     secondary: {
       cursor: 'pointer',
       bg: 'secondary',
@@ -133,6 +134,11 @@ theme.colors = {
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
   muted: theme.colors.gray[1],
+};
+
+theme.buttons.form = {
+  ...theme.buttons.primary,
+  mr: 2,
 };
 
 export default theme;
