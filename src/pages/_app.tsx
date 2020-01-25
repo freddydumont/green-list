@@ -1,5 +1,5 @@
 import App from 'next/app';
-import { ThemeProvider, Styled, ColorMode } from 'theme-ui';
+import { ThemeProvider, Styled } from 'theme-ui';
 import { Container } from '@theme-ui/components';
 import NProgress from 'next-nprogress-emotion';
 import 'tailwindcss/dist/base.css';
@@ -24,7 +24,6 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <ThemeProvider theme={theme}>
-        <ColorMode />
         <Header />
         <NProgress />
         <Styled.root>
