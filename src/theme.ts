@@ -85,6 +85,17 @@ const theme = {
     },
   },
   forms: {
+    input: {
+      height: 12,
+      mb: 4,
+      bg: 'light',
+      borderColor: 'muted',
+    },
+    label: {
+      mb: 1,
+      lineHeight: 'normal',
+      fontWeight: 'bold',
+    },
     radio: {
       color: 'text',
     },
@@ -141,12 +152,14 @@ theme.colors = {
   warning: theme.colors.yellow[3],
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
-  muted: theme.colors.gray[1],
+  muted: theme.colors.gray[2],
   modes: {
     dark: {
       background: theme.colors.gray[9],
       text: theme.colors.gray[0],
       textMuted: theme.colors.gray[5],
+      light: theme.colors.gray[8],
+      muted: theme.colors.gray[6],
     },
   },
 };

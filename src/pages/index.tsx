@@ -36,7 +36,7 @@ export default () => {
       page = (
         <FormPage
           title="Contact information"
-          description="These informations will allow us to identify and contact you."
+          description="The information you provide here will allow us to identify and contact you."
         >
           <Flex
             as="form"
@@ -45,30 +45,31 @@ export default () => {
               flexDirection: 'column',
             }}
           >
-            <Field label="First Name" name="first_name" mb={3} />
-            <Field label="Last Name" name="last_name" mb={3} />
+            <Field label="First Name" name="first_name" />
+            <Field label="Last Name" name="last_name" />
 
             <Label htmlFor="email">Email</Label>
-            <Input type="email" name="email" mb={3} />
+            <Input type="email" name="email" />
 
             <Label htmlFor="date_of_birth">Date of birth</Label>
-            <Input type="date" name="date_of_birth" mb={3} />
+            <Input type="date" name="date_of_birth" />
 
-            <Flex mb={3}>
+            <Box mb={4}>
+              <Label>Gender</Label>
               <Label>
-                <Radio name="sex" value="male" /> Male
+                <Radio name="gender" value="male" /> Male
               </Label>
               <Label>
-                <Radio name="sex" value="female" /> Female
+                <Radio name="gender" value="female" /> Female
               </Label>
-            </Flex>
+            </Box>
 
-            <Field label="City" name="location" mb={3} />
+            <Field label="City" name="location" />
 
             <Label htmlFor="phone">Phone number</Label>
-            <Input type="tel" name="phone" mb={3} />
+            <Input type="tel" name="phone" />
 
-            <Box mb={3}>
+            <Box mb={4}>
               <Label>Contact preferences</Label>
               <Label>
                 <Checkbox name="contact_preference" value="email" />
