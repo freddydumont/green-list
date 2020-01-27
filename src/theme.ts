@@ -144,6 +144,9 @@ theme.colors = {
 theme.buttons.form = {
   ...theme.buttons.primary,
   mr: 2,
+  '&:last-child': {
+    mr: 0,
+  },
 };
 
 export default theme;
