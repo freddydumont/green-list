@@ -79,8 +79,17 @@ const theme = {
       'hsl(22, 82%, 39%)',
       'hsl(15, 86%, 30%)',
     ],
+    // dark mode and other colors are defined below
     modes: {
       dark: {},
+    },
+  },
+  forms: {
+    radio: {
+      color: 'text',
+    },
+    checkbox: {
+      color: 'text',
     },
   },
   layout: {
@@ -99,6 +108,7 @@ const theme = {
         boxShadow: 'default',
       },
     },
+    // form styles are defined below because of self-referencement
     form: {},
     secondary: {
       cursor: 'pointer',
