@@ -1509,6 +1509,8 @@ declare const themeUIPresets: {
       gray: string[];
       grayDark: string;
       green: string[];
+      highlight: string;
+      highlightMore: string;
       indigo: string[];
       info: string;
       light: string;

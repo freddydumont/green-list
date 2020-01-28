@@ -90,18 +90,23 @@ const theme = {
       mb: 4,
       bg: 'light',
       borderColor: 'muted',
+      outline: 'none',
+      transition: 'all 100ms ease-in-out',
+      '&:hover': {
+        borderColor: 'textMuted',
+      },
+      '&:focus': {
+        boxShadow: 'outline',
+      },
     },
     label: {
       mb: 1,
       lineHeight: 'normal',
       fontWeight: 'bold',
+      width: 'max-content',
     },
-    radio: {
-      color: 'text',
-    },
-    checkbox: {
-      color: 'text',
-    },
+    radio: {},
+    checkbox: {},
   },
   layout: {
     container: {
@@ -153,6 +158,8 @@ theme.colors = {
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
   muted: theme.colors.gray[2],
+  highlight: theme.colors.purple[0],
+  highlightMore: theme.colors.purple[1],
   modes: {
     dark: {
       background: theme.colors.gray[9],
@@ -170,6 +177,24 @@ theme.buttons.form = {
   '&:last-child': {
     mr: 0,
   },
+};
+
+const radioAndCheckbox = {
+  color: 'textMuted',
+  transition: 'all 100ms ease-in-out',
+  // this selector is found in the radio/checkbox theme-ui source code
+  'input:hover ~ &': {
+    color: 'primary',
+    bg: 'highlight',
+  },
+};
+
+theme.forms.checkbox = radioAndCheckbox;
+theme.forms.radio = radioAndCheckbox;
+
+theme.shadows = {
+  ...theme.shadows,
+  outline: `0 0 0 3px ${theme.colors.highlightMore}`,
 };
 
 export default theme;
