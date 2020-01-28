@@ -12,7 +12,7 @@ interface Props {
 /**
  * Basic layout for each form page
  */
-const FormPage = ({ title, description, children }: Props) => {
+const FormPageLayout = ({ title, description, children }: Props) => {
   return (
     <>
       <Styled.h1>{title}</Styled.h1>
@@ -38,4 +38,4 @@ const FormPage = ({ title, description, children }: Props) => {
   );
 };
 
-export default FormPage;
+export default FormPageLayout;
