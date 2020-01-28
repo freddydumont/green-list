@@ -19,14 +19,14 @@ export type FormEvent =
 
 type Language = 'en' | 'fr';
 
-interface User {
+export interface User {
   firstName: string;
   lastName: string;
   email: string;
   dateOfBirth: Date;
   gender: 'male' | 'female';
   phone: string;
-  contactPreference: 'phone' | 'text' | 'email';
+  contactPreference: ['phone' | 'text' | 'email'];
 }
 
 interface Skills {

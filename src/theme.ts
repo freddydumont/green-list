@@ -84,6 +84,13 @@ const theme = {
       dark: {},
     },
   },
+  variants: {
+    box: {
+      form: {
+        mb: 4,
+      },
+    },
+  },
   forms: {
     input: {
       height: 12,
