@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import FormPageLayout from './FormPageLayout';
 import { Form, FormField, FormInputChoice } from './FormComponents';
 
-const userSchema = yup.object().shape({
+export const userSchema = yup.object().shape({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
   email: yup
@@ -27,7 +27,7 @@ export type User = yup.InferType<typeof userSchema>;
 
 const FormPageInfo = () => {
   const onSubmit = (data: User) => {
-    console.log(data);
+    console.log(JSON.stringify(data));
   };
 
   return (
