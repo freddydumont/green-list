@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, Label, Input, Radio, Box, Checkbox } from '@theme-ui/components';
+import { Schema } from 'yup';
 
-interface Props {
+interface Props<T> {
   children: JSX.Element[] | JSX.Element;
   /** Function called when form is submitted */
-  onSubmit: (data: any) => void;
+  onSubmit: (data: T) => void;
+  validationSchema: Schema<T>;
 }
 
 /**
@@ -14,8 +15,12 @@ interface Props {
  * Passes `react-hook-form` methods to children.
  *
  */
-export function Form({ children, onSubmit }: Props) {
-  const methods = useForm();
+export function Form<FormData>({
+  children,
+  onSubmit,
+  validationSchema,
+}: Props<FormData>) {
+  const methods = useForm<FormData>({ validationSchema });
   const { handleSubmit } = methods;
 
   return (
@@ -45,6 +50,7 @@ export function Form({ children, onSubmit }: Props) {
 
 interface FormFieldProps {
   /** The Form component provides this prop */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
   /** Displayed label */
   label: string;

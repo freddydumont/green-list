@@ -1,6 +1,29 @@
+import * as yup from 'yup';
 import FormPageLayout from './FormPageLayout';
 import { Form, FormField, FormInputChoice } from './FormComponents';
-import { User } from '../formMachine';
+
+const userSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
+  dateOfBirth: yup.date().required(),
+  gender: yup
+    .mixed<'male' | 'female'>()
+    .oneOf(['male', 'female'])
+    .required(),
+  location: yup.string().required(),
+  phone: yup.string().required(),
+  contactPreference: yup
+    .array(
+      yup.mixed<'email' | 'phone' | 'text'>().oneOf(['email', 'phone', 'text'])
+    )
+    .required(),
+});
+
+export type User = yup.InferType<typeof userSchema>;
 
 const FormPageInfo = () => {
   const onSubmit = (data: User) => {
@@ -12,7 +35,7 @@ const FormPageInfo = () => {
       title="Contact information"
       description="The information you provide here will allow us to identify and contact you."
     >
-      <Form onSubmit={onSubmit}>
+      <Form<User> onSubmit={onSubmit} validationSchema={userSchema}>
         <FormField label="First Name" name="firstName" />
         <FormField label="Last Name" name="lastName" />
         <FormField label="Email" name="email" type="email" />

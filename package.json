@@ -24,7 +24,8 @@
     "react-hook-form": "^4.7.1",
     "tailwindcss": "^1.1.4",
     "theme-ui": "^0.3.0",
-    "xstate": "^4.7.6"
+    "xstate": "^4.7.6",
+    "yup": "^0.28.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
@@ -35,6 +36,7 @@
     "@types/react": "^16.9.16",
     "@types/theme-ui": "^0.2.6",
     "@types/theme-ui__components": "^0.2.0",
+    "@types/yup": "^0.26.29",
     "@typescript-eslint/eslint-plugin": "^2.11.0",
     "@typescript-eslint/parser": "^2.11.0",
     "babel-eslint": "^10.0.3",
