@@ -106,6 +106,7 @@ const theme = {
         boxShadow: 'outline',
       },
     },
+    inputError: {},
     label: {
       mb: 1,
       lineHeight: 'normal',
@@ -160,7 +161,7 @@ theme.colors = {
   background: theme.colors.gray[0],
   text: theme.colors.gray[8],
   textMuted: theme.colors.gray[5],
-  danger: theme.colors.red[4],
+  danger: theme.colors.red[2],
   warning: theme.colors.yellow[3],
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
@@ -199,9 +200,16 @@ const radioAndCheckbox = {
 theme.forms.checkbox = radioAndCheckbox;
 theme.forms.radio = radioAndCheckbox;
 
+theme.forms.inputError = {
+  ...theme.forms.input,
+  boxShadow: 'error',
+  border: 'none',
+};
+
 theme.shadows = {
   ...theme.shadows,
   outline: `0 0 0 3px ${theme.colors.highlightMore}`,
+  error: `0 0 2px 3px ${theme.colors.danger}`,
 };
 
 export default theme;

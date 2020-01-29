@@ -1641,6 +1641,7 @@ declare const themeUIPresets: {
       md: string;
       none: string;
       outline: string;
+      error: string;
       xl: string;
     };
     sizes: {

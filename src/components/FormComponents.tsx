@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FieldError } from 'react-hook-form';
 import { Flex, Label, Input, Radio, Box, Checkbox } from '@theme-ui/components';
 import { Schema } from 'yup';
 
@@ -20,8 +20,9 @@ export function Form<FormData>({
   onSubmit,
   validationSchema,
 }: Props<FormData>) {
-  const methods = useForm<FormData>({ validationSchema });
-  const { handleSubmit } = methods;
+  const { handleSubmit, register, errors } = useForm<FormData>({
+    validationSchema,
+  });
 
   return (
     <Flex
@@ -37,7 +38,8 @@ export function Form<FormData>({
               ? React.createElement(child.type, {
                   ...{
                     ...child.props,
-                    register: methods.register,
+                    register,
+                    errors,
                     key: child.props.name,
                   },
                 })
@@ -52,8 +54,13 @@ interface FormFieldProps {
   /** The Form component provides this prop */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
+  errors?: {
+    [key: string]: FieldError;
+  };
   /** Displayed label */
   label: string;
+  /** input and label name */
+  name: string;
 }
 
 type FormInputProps = FormFieldProps & JSX.IntrinsicElements['input'];
@@ -61,11 +68,23 @@ type FormInputProps = FormFieldProps & JSX.IntrinsicElements['input'];
 /**
  * Simple form input with label
  */
-export function FormField({ register, name, label, ...rest }: FormInputProps) {
+export function FormField({
+  register,
+  errors,
+  name,
+  label,
+  ...rest
+}: FormInputProps) {
   return (
     <>
       <Label htmlFor={name}>{label}</Label>
-      <Input name={name} ref={register} {...rest} />
+      <Input
+        variant={errors?.[name] ? 'inputError' : 'input'}
+        name={name}
+        ref={register}
+        {...rest}
+      />
+      <p>{errors?.[name]?.message}</p>
     </>
   );
 }
