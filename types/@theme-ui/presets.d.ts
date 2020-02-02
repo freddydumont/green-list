@@ -1505,6 +1505,7 @@ declare const themeUIPresets: {
       black: string;
       blue: string[];
       danger: string;
+      textDanger: string;
       dark: string;
       gray: string[];
       grayDark: string;

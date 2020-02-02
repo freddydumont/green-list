@@ -1,6 +1,14 @@
 import React from 'react';
-import { useForm, FieldError } from 'react-hook-form';
-import { Flex, Label, Input, Radio, Box, Checkbox } from '@theme-ui/components';
+import { useForm, FieldError, ErrorMessage } from 'react-hook-form';
+import {
+  Flex,
+  Label,
+  Input,
+  Radio,
+  Box,
+  Checkbox,
+  Text,
+} from '@theme-ui/components';
 import { Schema } from 'yup';
 
 interface Props<T> {
@@ -84,7 +92,11 @@ export function FormField({
         ref={register}
         {...rest}
       />
-      <p>{errors?.[name]?.message}</p>
+      <ErrorMessage
+        as={<Text color="textDanger" mb={4} />}
+        name={name}
+        errors={errors}
+      />
     </>
   );
 }
@@ -108,12 +120,14 @@ export function FormInputChoice({
   options,
   ...rest
 }: FormInputChoiceProps) {
+  const hasError = errors?.[name];
+
   return (
-    <Box variant="box.form">
+    <Box variant={hasError ? 'box.formError' : 'box.form'}>
       <Label>{label}</Label>
       <Box
         sx={{
-          boxShadow: errors?.[name] ? 'error' : 'none',
+          boxShadow: hasError ? 'error' : 'none',
           maxWidth: 'max-content',
           pr: 2,
           borderRadius: '4px',
@@ -131,7 +145,11 @@ export function FormInputChoice({
           </Label>
         ))}
       </Box>
-      <p>{errors?.[name]?.message}</p>
+      <ErrorMessage
+        as={<Text color="textDanger" mb={4} />}
+        name={name}
+        errors={errors}
+      />
     </Box>
   );
 }

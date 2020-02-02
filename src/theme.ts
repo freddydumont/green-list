@@ -1,5 +1,9 @@
 import { tailwind } from '@theme-ui/presets';
 
+/**
+ * If you see an empty object in the theme, see below the theme object
+ * for its definition.
+ */
 const theme = {
   ...tailwind,
   useCustomProperties: true,
@@ -89,6 +93,10 @@ const theme = {
       form: {
         mb: 4,
       },
+      // in error state, the margin is on the error component
+      formError: {
+        mb: 1,
+      },
     },
   },
   forms: {
@@ -162,6 +170,7 @@ theme.colors = {
   text: theme.colors.gray[8],
   textMuted: theme.colors.gray[5],
   danger: theme.colors.red[3],
+  textDanger: theme.colors.red[6],
   warning: theme.colors.yellow[3],
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
@@ -173,6 +182,7 @@ theme.colors = {
       background: theme.colors.gray[9],
       text: theme.colors.gray[0],
       textMuted: theme.colors.gray[5],
+      textDanger: theme.colors.red[2],
       light: theme.colors.gray[8],
       muted: theme.colors.gray[6],
     },
@@ -204,6 +214,7 @@ theme.forms.inputError = {
   ...theme.forms.input,
   boxShadow: 'error',
   border: 'none',
+  mb: 1,
 };
 
 theme.shadows = {
