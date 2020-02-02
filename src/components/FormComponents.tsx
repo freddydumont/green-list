@@ -101,6 +101,7 @@ type FormInputChoiceProps = {
  */
 export function FormInputChoice({
   register,
+  errors,
   type,
   name,
   label,
@@ -110,17 +111,27 @@ export function FormInputChoice({
   return (
     <Box variant="box.form">
       <Label>{label}</Label>
-      {options.map(({ label, value }) => (
-        <Label key={value}>
-          {type === 'radio' && (
-            <Radio name={name} value={value} ref={register} {...rest} />
-          )}
-          {type === 'checkbox' && (
-            <Checkbox name={name} value={value} ref={register} {...rest} />
-          )}
-          {label}
-        </Label>
-      ))}
+      <Box
+        sx={{
+          boxShadow: errors?.[name] ? 'error' : 'none',
+          maxWidth: 'max-content',
+          pr: 2,
+          borderRadius: '4px',
+        }}
+      >
+        {options.map(({ label, value }) => (
+          <Label key={value}>
+            {type === 'radio' && (
+              <Radio name={name} value={value} ref={register} {...rest} />
+            )}
+            {type === 'checkbox' && (
+              <Checkbox name={name} value={value} ref={register} {...rest} />
+            )}
+            {label}
+          </Label>
+        ))}
+      </Box>
+      <p>{errors?.[name]?.message}</p>
     </Box>
   );
 }

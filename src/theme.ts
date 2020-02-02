@@ -161,7 +161,7 @@ theme.colors = {
   background: theme.colors.gray[0],
   text: theme.colors.gray[8],
   textMuted: theme.colors.gray[5],
-  danger: theme.colors.red[2],
+  danger: theme.colors.red[3],
   warning: theme.colors.yellow[3],
   info: theme.colors.blue[4],
   success: theme.colors.teal[2],
