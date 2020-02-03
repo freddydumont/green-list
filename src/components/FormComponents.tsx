@@ -10,6 +10,10 @@ import {
   Text,
 } from '@theme-ui/components';
 import { Schema } from 'yup';
+import { useMachine } from '@xstate/react';
+import { InputMachine } from '../inputMachine';
+import isEmpty from 'lodash/isEmpty';
+import { StateValue } from 'xstate';
 
 interface Props<T> {
   children: JSX.Element[] | JSX.Element;
@@ -62,9 +66,7 @@ interface FormFieldProps {
   /** The Form component provides this prop */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
-  errors?: {
-    [key: string]: FieldError;
-  };
+  errors?: Record<string, FieldError>;
   /** Displayed label */
   label: string;
   /** input and label name */
@@ -74,7 +76,8 @@ interface FormFieldProps {
 type FormInputProps = FormFieldProps & JSX.IntrinsicElements['input'];
 
 /**
- * Simple form input with label
+ * Simple form input with label.
+ * Tracks its state explicitely via xstate to know when valid state is reached.
  */
 export function FormField({
   register,
@@ -83,11 +86,27 @@ export function FormField({
   label,
   ...rest
 }: FormInputProps) {
+  const [state, send] = useMachine(InputMachine);
+
+  // if errors is not empty, form has been validated
+  // so input has to be in either valid or error state
+  if (!isEmpty(errors)) {
+    errors?.[name] ? send('ERROR') : send('SUCCESS');
+  }
+
+  function getVariant(state: StateValue): string {
+    return ({
+      idle: 'input',
+      error: 'inputError',
+      valid: 'inputValid',
+    } as Record<string, string>)[state as string];
+  }
+
   return (
     <>
       <Label htmlFor={name}>{label}</Label>
       <Input
-        variant={errors?.[name] ? 'inputError' : 'input'}
+        variant={getVariant(state.value)}
         name={name}
         ref={register}
         {...rest}

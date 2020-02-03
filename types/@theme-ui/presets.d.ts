@@ -1525,6 +1525,7 @@ declare const themeUIPresets: {
       secondary: string;
       secondaryHover: string;
       success: string;
+      successDark: string;
       teal: string[];
       text: string;
       textMuted: string;
@@ -1643,6 +1644,8 @@ declare const themeUIPresets: {
       none: string;
       outline: string;
       error: string;
+      valid: string;
+      validHover: string;
       xl: string;
     };
     sizes: {

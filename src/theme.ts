@@ -115,6 +115,7 @@ const theme = {
       },
     },
     inputError: {},
+    inputValid: {},
     label: {
       mb: 1,
       lineHeight: 'normal',
@@ -173,7 +174,8 @@ theme.colors = {
   textDanger: theme.colors.red[6],
   warning: theme.colors.yellow[3],
   info: theme.colors.blue[4],
-  success: theme.colors.teal[2],
+  success: theme.colors.green[3],
+  successDark: theme.colors.green[4],
   muted: theme.colors.gray[2],
   highlight: theme.colors.purple[0],
   highlightMore: theme.colors.purple[1],
@@ -217,10 +219,21 @@ theme.forms.inputError = {
   mb: 1,
 };
 
+theme.forms.inputValid = {
+  ...theme.forms.input,
+  boxShadow: 'valid',
+  border: 'none',
+  '&:hover, &:focus': {
+    boxShadow: 'validHover',
+  },
+};
+
 theme.shadows = {
   ...theme.shadows,
   outline: `0 0 0 3px ${theme.colors.highlightMore}`,
   error: `0 0 2px 3px ${theme.colors.danger}`,
+  valid: `0 0 0 3px ${theme.colors.success}`,
+  validHover: `0 0 0 3px ${theme.colors.successDark}`,
 };
 
 export default theme;
