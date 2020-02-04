@@ -1505,6 +1505,7 @@ declare const themeUIPresets: {
       black: string;
       blue: string[];
       danger: string;
+      textDanger: string;
       dark: string;
       gray: string[];
       grayDark: string;
@@ -1524,6 +1525,7 @@ declare const themeUIPresets: {
       secondary: string;
       secondaryHover: string;
       success: string;
+      successDark: string;
       teal: string[];
       text: string;
       textMuted: string;
@@ -1641,6 +1643,9 @@ declare const themeUIPresets: {
       md: string;
       none: string;
       outline: string;
+      error: string;
+      valid: string;
+      validHover: string;
       xl: string;
     };
     sizes: {

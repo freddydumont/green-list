@@ -1,5 +1,9 @@
 import { tailwind } from '@theme-ui/presets';
 
+/**
+ * If you see an empty object in the theme, see below the theme object
+ * for its definition.
+ */
 const theme = {
   ...tailwind,
   useCustomProperties: true,
@@ -89,6 +93,10 @@ const theme = {
       form: {
         mb: 4,
       },
+      // in error state, the margin is on the error component
+      formError: {
+        mb: 1,
+      },
     },
   },
   forms: {
@@ -106,6 +114,8 @@ const theme = {
         boxShadow: 'outline',
       },
     },
+    inputError: {},
+    inputValid: {},
     label: {
       mb: 1,
       lineHeight: 'normal',
@@ -160,10 +170,12 @@ theme.colors = {
   background: theme.colors.gray[0],
   text: theme.colors.gray[8],
   textMuted: theme.colors.gray[5],
-  danger: theme.colors.red[4],
+  danger: theme.colors.red[3],
+  textDanger: theme.colors.red[6],
   warning: theme.colors.yellow[3],
   info: theme.colors.blue[4],
-  success: theme.colors.teal[2],
+  success: theme.colors.green[3],
+  successDark: theme.colors.green[4],
   muted: theme.colors.gray[2],
   highlight: theme.colors.purple[0],
   highlightMore: theme.colors.purple[1],
@@ -172,6 +184,7 @@ theme.colors = {
       background: theme.colors.gray[9],
       text: theme.colors.gray[0],
       textMuted: theme.colors.gray[5],
+      textDanger: theme.colors.red[2],
       light: theme.colors.gray[8],
       muted: theme.colors.gray[6],
     },
@@ -199,9 +212,28 @@ const radioAndCheckbox = {
 theme.forms.checkbox = radioAndCheckbox;
 theme.forms.radio = radioAndCheckbox;
 
+theme.forms.inputError = {
+  ...theme.forms.input,
+  boxShadow: 'error',
+  border: 'none',
+  mb: 1,
+};
+
+theme.forms.inputValid = {
+  ...theme.forms.input,
+  boxShadow: 'valid',
+  border: 'none',
+  '&:hover, &:focus': {
+    boxShadow: 'validHover',
+  },
+};
+
 theme.shadows = {
   ...theme.shadows,
   outline: `0 0 0 3px ${theme.colors.highlightMore}`,
+  error: `0 0 2px 3px ${theme.colors.danger}`,
+  valid: `0 0 0 3px ${theme.colors.success}`,
+  validHover: `0 0 0 3px ${theme.colors.successDark}`,
 };
 
 export default theme;

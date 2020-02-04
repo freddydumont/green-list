@@ -1,12 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Flex, Label, Input, Radio, Box, Checkbox } from '@theme-ui/components';
+import { useForm, FieldError, ErrorMessage } from 'react-hook-form';
+import {
+  Flex,
+  Label,
+  Input,
+  Radio,
+  Box,
+  Checkbox,
+  Text,
+} from '@theme-ui/components';
+import { Schema } from 'yup';
+import { useMachine } from '@xstate/react';
+import { InputMachine } from '../inputMachine';
+import isEmpty from 'lodash/isEmpty';
+import { StateValue } from 'xstate';
 
-interface Props {
+interface Props<T> {
   children: JSX.Element[] | JSX.Element;
   /** Function called when form is submitted */
-  onSubmit: (data: any) => void;
+  onSubmit: (data: T) => void;
+  validationSchema: Schema<T>;
 }
 
 /**
@@ -14,9 +27,14 @@ interface Props {
  * Passes `react-hook-form` methods to children.
  *
  */
-export function Form({ children, onSubmit }: Props) {
-  const methods = useForm();
-  const { handleSubmit } = methods;
+export function Form<FormData>({
+  children,
+  onSubmit,
+  validationSchema,
+}: Props<FormData>) {
+  const { handleSubmit, register, errors } = useForm<FormData>({
+    validationSchema,
+  });
 
   return (
     <Flex
@@ -32,7 +50,8 @@ export function Form({ children, onSubmit }: Props) {
               ? React.createElement(child.type, {
                   ...{
                     ...child.props,
-                    register: methods.register,
+                    register,
+                    errors,
                     key: child.props.name,
                   },
                 })
@@ -45,21 +64,65 @@ export function Form({ children, onSubmit }: Props) {
 
 interface FormFieldProps {
   /** The Form component provides this prop */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
+  errors?: Record<string, FieldError>;
   /** Displayed label */
   label: string;
+  /** input and label name */
+  name: string;
 }
 
 type FormInputProps = FormFieldProps & JSX.IntrinsicElements['input'];
 
 /**
- * Simple form input with label
+ * Simple form input with label.
+ * Tracks its state explicitely via xstate to know when valid state is reached.
  */
-export function FormField({ register, name, label, ...rest }: FormInputProps) {
+export function FormField({
+  register,
+  errors,
+  name,
+  label,
+  ...rest
+}: FormInputProps) {
+  const [state, send] = useMachine(InputMachine);
+
+  // if errors is not empty, form has been validated
+  // so input has to be in either valid or error state
+  if (!isEmpty(errors)) {
+    errors?.[name] ? send('ERROR') : send('SUCCESS');
+  }
+
+  // however, if error is empty, but a field was previously in error state,
+  // it should be forced into valid state.
+  // this prevents the last field to be ignored in the logic above
+  if (isEmpty(errors) && state.value === 'error') {
+    send('SUCCESS');
+  }
+
+  function getVariant(state: StateValue): string {
+    return ({
+      idle: 'input',
+      error: 'inputError',
+      valid: 'inputValid',
+    } as Record<string, string>)[state as string];
+  }
+
   return (
     <>
       <Label htmlFor={name}>{label}</Label>
-      <Input name={name} ref={register} {...rest} />
+      <Input
+        variant={getVariant(state.value)}
+        name={name}
+        ref={register}
+        {...rest}
+      />
+      <ErrorMessage
+        as={<Text color="textDanger" mb={4} />}
+        name={name}
+        errors={errors}
+      />
     </>
   );
 }
@@ -76,26 +139,43 @@ type FormInputChoiceProps = {
  */
 export function FormInputChoice({
   register,
+  errors,
   type,
   name,
   label,
   options,
   ...rest
 }: FormInputChoiceProps) {
+  const hasError = errors?.[name];
+
   return (
-    <Box variant="box.form">
+    <Box variant={hasError ? 'box.formError' : 'box.form'}>
       <Label>{label}</Label>
-      {options.map(({ label, value }) => (
-        <Label key={value}>
-          {type === 'radio' && (
-            <Radio name={name} value={value} ref={register} {...rest} />
-          )}
-          {type === 'checkbox' && (
-            <Checkbox name={name} value={value} ref={register} {...rest} />
-          )}
-          {label}
-        </Label>
-      ))}
+      <Box
+        sx={{
+          boxShadow: hasError ? 'error' : 'none',
+          maxWidth: 'max-content',
+          pr: 2,
+          borderRadius: '4px',
+        }}
+      >
+        {options.map(({ label, value }) => (
+          <Label key={value}>
+            {type === 'radio' && (
+              <Radio name={name} value={value} ref={register} {...rest} />
+            )}
+            {type === 'checkbox' && (
+              <Checkbox name={name} value={value} ref={register} {...rest} />
+            )}
+            {label}
+          </Label>
+        ))}
+      </Box>
+      <ErrorMessage
+        as={<Text color="textDanger" mb={4} />}
+        name={name}
+        errors={errors}
+      />
     </Box>
   );
 }
