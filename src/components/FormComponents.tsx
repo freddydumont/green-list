@@ -94,6 +94,13 @@ export function FormField({
     errors?.[name] ? send('ERROR') : send('SUCCESS');
   }
 
+  // however, if error is empty, but a field was previously in error state,
+  // it should be forced into valid state.
+  // this prevents the last field to be ignored in the logic above
+  if (isEmpty(errors) && state.value === 'error') {
+    send('SUCCESS');
+  }
+
   function getVariant(state: StateValue): string {
     return ({
       idle: 'input',
