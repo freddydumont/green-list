@@ -134,7 +134,9 @@ const theme = {
     },
   },
   buttons: {
+    ...tailwind.buttons,
     primary: {
+      fontWeight: 'semibold',
       cursor: 'pointer',
       '&:hover': {
         bg: 'primaryHover',

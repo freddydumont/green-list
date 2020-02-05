@@ -14,7 +14,7 @@ const FormNavButton = () => {
   const next = <Button variant="form" as="input" type="submit" value="Next" />;
 
   const previous = (
-    <Button variant="form" onClick={() => send({ type: 'PREVIOUS' })}>
+    <Button variant="outline" mr={2} onClick={() => send({ type: 'PREVIOUS' })}>
       Previous
     </Button>
   );
@@ -39,8 +39,6 @@ const FormNavButton = () => {
       );
 
     case 'info':
-      return next;
-
     case 'skills':
     case 'availability':
       return (
