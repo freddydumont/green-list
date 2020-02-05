@@ -1,6 +1,12 @@
 import * as yup from 'yup';
 import FormPageLayout from './FormPageLayout';
 import { Form, FormField, FormInputChoice } from './FormComponents';
+import { Divider } from '@theme-ui/components';
+import { Flex } from 'theme-ui';
+import FormNavButton from './FormNavButton';
+import { useContext } from 'react';
+import { useService } from '@xstate/react';
+import { ServiceContext } from '../pages';
 
 export const userSchema = yup.object().shape({
   firstName: yup.string().required(),
@@ -26,8 +32,16 @@ export const userSchema = yup.object().shape({
 export type User = yup.InferType<typeof userSchema>;
 
 const FormPageInfo = () => {
+  const service = useContext(ServiceContext);
+  const [, send] = useService(service);
+
   const onSubmit = (data: User) => {
-    console.log(JSON.stringify(data));
+    send({
+      type: 'NEXT',
+      data: {
+        user: data,
+      },
+    });
   };
 
   return (
@@ -65,7 +79,14 @@ const FormPageInfo = () => {
           ]}
         />
 
-        <input type="submit" />
+        <Divider mx={0} mt={0} mb={4} />
+        <Flex
+          sx={{
+            justifyContent: 'flex-end',
+          }}
+        >
+          <FormNavButton />
+        </Flex>
       </Form>
     </FormPageLayout>
   );

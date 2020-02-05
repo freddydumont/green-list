@@ -11,11 +11,7 @@ const FormNavButton = () => {
   const service = useContext(ServiceContext);
   const [current, send] = useService(service);
 
-  const next = (
-    <Button variant="form" onClick={() => send({ type: 'NEXT' })}>
-      Next
-    </Button>
-  );
+  const next = <Button variant="form" as="input" type="submit" value="Next" />;
 
   const previous = (
     <Button variant="form" onClick={() => send({ type: 'PREVIOUS' })}>
