@@ -14,7 +14,10 @@ export interface FormStateSchema {
 
 export type FormEvent =
   | { type: 'START'; lang: Language }
-  | { type: 'NEXT' }
+  | {
+      type: 'NEXT';
+      data: { [K in keyof FormContext]?: FormContext[K] };
+    }
   | { type: 'PREVIOUS' }
   | { type: 'SUBMIT' };
 
@@ -54,10 +57,9 @@ const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
         on: {
           START: {
             target: 'info',
-            actions: (context, event) =>
-              assign({
-                lang: event.lang,
-              }),
+            actions: assign({
+              lang: (ctx, event) => event.lang,
+            }),
           },
         },
       },
@@ -66,6 +68,7 @@ const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
           NEXT: {
             target: 'skills',
             cond: 'validateFields',
+            actions: assign((ctx, event) => event.data),
           },
         },
       },
