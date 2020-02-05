@@ -9,6 +9,7 @@ import {
 } from '../formMachine';
 import FormPageLayout from '../components/FormPageLayout';
 import FormPageInfo from '../components/FormPageInfo';
+import FormPageSkills from '../components/FormPageSkills';
 
 type Service = Interpreter<FormContext, FormStateSchema, FormEvent>;
 
@@ -31,12 +32,7 @@ export default () => {
       break;
 
     case 'skills':
-      page = (
-        <FormPageLayout
-          title="Skills"
-          description="this is a test description"
-        />
-      );
+      page = <FormPageSkills />;
       break;
     case 'availability':
       page = (
