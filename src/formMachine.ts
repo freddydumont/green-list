@@ -1,5 +1,6 @@
 import { Machine, assign } from 'xstate';
 import { User } from './components/FormPageInfo';
+import { Skills } from './components/FormPageSkills';
 
 export interface FormStateSchema {
   states: {
@@ -22,16 +23,6 @@ export type FormEvent =
   | { type: 'SUBMIT' };
 
 type Language = 'en' | 'fr';
-
-interface Skills {
-  kitchen: {};
-  maintenance: {};
-  office: {};
-  technology: {};
-  finance: {};
-  other: string;
-  consent: boolean;
-}
 
 interface Availability {
   seasonal: boolean;
