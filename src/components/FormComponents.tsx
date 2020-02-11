@@ -1,5 +1,10 @@
 import React from 'react';
-import { useForm, FieldError, ErrorMessage } from 'react-hook-form';
+import {
+  useForm,
+  FieldError,
+  ErrorMessage,
+  FormContext,
+} from 'react-hook-form';
 import {
   Flex,
   Label,
@@ -19,7 +24,8 @@ interface Props<T> {
   children: JSX.Element[] | JSX.Element;
   /** Function called when form is submitted */
   onSubmit: (data: T) => void;
-  validationSchema: Schema<T>;
+  /** TODO: remove optional when done developing form */
+  validationSchema?: Schema<T>;
 }
 
 /**
@@ -32,33 +38,35 @@ export function Form<FormData>({
   onSubmit,
   validationSchema,
 }: Props<FormData>) {
-  const { handleSubmit, register, errors } = useForm<FormData>({
+  const methods = useForm<FormData>({
     validationSchema,
   });
 
   return (
-    <Flex
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        flexDirection: 'column',
-      }}
-    >
-      {Array.isArray(children)
-        ? children.map((child) => {
-            return child.props.name
-              ? React.createElement(child.type, {
-                  ...{
-                    ...child.props,
-                    register,
-                    errors,
-                    key: child.props.name,
-                  },
-                })
-              : child;
-          })
-        : children}
-    </Flex>
+    <FormContext {...methods}>
+      <Flex
+        as="form"
+        onSubmit={methods.handleSubmit(onSubmit)}
+        sx={{
+          flexDirection: 'column',
+        }}
+      >
+        {Array.isArray(children)
+          ? children.map((child) => {
+              return child.props.name
+                ? React.createElement(child.type, {
+                    ...{
+                      ...child.props,
+                      register: methods.register,
+                      errors: methods.errors,
+                      key: child.props.name,
+                    },
+                  })
+                : child;
+            })
+          : children}
+      </Flex>
+    </FormContext>
   );
 }
 
