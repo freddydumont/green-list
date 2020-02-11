@@ -142,9 +142,7 @@ type FormInputChoiceProps = {
   options: { label: string; value?: string }[];
 } & FormInputProps;
 
-/**
- * Radio or checkbox input.
- */
+/** Radio or checkbox input */
 export function FormInputChoice({
   register,
   errors,
@@ -154,6 +152,30 @@ export function FormInputChoice({
   options,
   ...rest
 }: FormInputChoiceProps) {
+  return (
+    <FormInputChoiceBox {...{ errors, name, label }}>
+      {options.map(({ label, value }) => (
+        <Label key={label}>
+          {type === 'radio' && (
+            <Radio name={name} value={value} ref={register} {...rest} />
+          )}
+          {type === 'checkbox' && (
+            <Checkbox name={name} value={value} ref={register} {...rest} />
+          )}
+          {label}
+        </Label>
+      ))}
+    </FormInputChoiceBox>
+  );
+}
+
+/** Presentational layer for FormInputChoice */
+export function FormInputChoiceBox({
+  errors,
+  name,
+  label,
+  children,
+}: FormInputProps) {
   const hasError = errors?.[name];
 
   return (
@@ -167,17 +189,7 @@ export function FormInputChoice({
           borderRadius: '4px',
         }}
       >
-        {options.map(({ label, value }) => (
-          <Label key={label}>
-            {type === 'radio' && (
-              <Radio name={name} value={value} ref={register} {...rest} />
-            )}
-            {type === 'checkbox' && (
-              <Checkbox name={name} value={value} ref={register} {...rest} />
-            )}
-            {label}
-          </Label>
-        ))}
+        {children}
       </Box>
       <ErrorMessage
         as={<Text color="textDanger" mb={4} />}
