@@ -68,7 +68,7 @@ interface FormFieldProps {
   register?: any;
   errors?: Record<string, FieldError>;
   /** Displayed label */
-  label: string;
+  label?: string;
   /** input and label name */
   name: string;
 }
@@ -131,7 +131,7 @@ type FormInputChoiceProps = {
   /** input type */
   type: 'radio' | 'checkbox';
   /** individual options, eg. a single checkbox */
-  options: { label: string; value: string }[];
+  options: { label: string; value?: string }[];
 } & FormInputProps;
 
 /**
@@ -150,7 +150,7 @@ export function FormInputChoice({
 
   return (
     <Box variant={hasError ? 'box.formError' : 'box.form'}>
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <Box
         sx={{
           boxShadow: hasError ? 'error' : 'none',
@@ -160,7 +160,7 @@ export function FormInputChoice({
         }}
       >
         {options.map(({ label, value }) => (
-          <Label key={value}>
+          <Label key={label}>
             {type === 'radio' && (
               <Radio name={name} value={value} ref={register} {...rest} />
             )}
