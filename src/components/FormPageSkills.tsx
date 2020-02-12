@@ -87,7 +87,7 @@ const FormPageSkills = () => {
 
         <ConditionalCheckboxes />
 
-        <FormField label="Other skills" name="other" />
+        <FormField label="Other skills" name="other" as="textarea" />
 
         <FormInputChoice
           type="checkbox"

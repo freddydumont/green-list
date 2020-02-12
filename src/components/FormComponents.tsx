@@ -13,6 +13,7 @@ import {
   Box,
   Checkbox,
   Text,
+  Textarea,
 } from '@theme-ui/components';
 import { Schema } from 'yup';
 import { useMachine } from '@xstate/react';
@@ -79,9 +80,13 @@ interface FormFieldProps {
   label?: string;
   /** input and label name */
   name: string;
+  /** HTML element to render, defaults to 'input' */
+  as?: 'input' | 'textarea';
 }
 
-type FormInputProps = FormFieldProps & JSX.IntrinsicElements['input'];
+type FormInputProps = FormFieldProps &
+  JSX.IntrinsicElements['input'] &
+  JSX.IntrinsicElements['textarea'];
 
 /**
  * Simple form input with label.
@@ -92,6 +97,7 @@ export function FormField({
   errors,
   name,
   label,
+  as = 'input',
   ...rest
 }: FormInputProps) {
   const [state, send] = useMachine(InputMachine);
@@ -117,15 +123,18 @@ export function FormField({
     } as Record<string, string>)[state as string];
   }
 
+  const props = {
+    variant: getVariant(state.value),
+    ref: register,
+    name,
+    ...rest,
+  };
+
   return (
     <>
       <Label htmlFor={name}>{label}</Label>
-      <Input
-        variant={getVariant(state.value)}
-        name={name}
-        ref={register}
-        {...rest}
-      />
+      {as === 'input' && <Input {...props} />}
+      {as === 'textarea' && <Textarea sx={{ height: 24 }} {...props} />}
       <ErrorMessage
         as={<Text color="textDanger" mb={4} />}
         name={name}
