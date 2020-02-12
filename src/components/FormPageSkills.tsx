@@ -81,7 +81,7 @@ const FormPageSkills = () => {
             { label: 'Kitchen', value: 'kitchen' },
             { label: 'Maintenance', value: 'maintenance' },
             { label: 'Technology', value: 'technology' },
-            { label: 'Accounting', value: 'accouting' },
+            { label: 'Accounting', value: 'accounting' },
           ]}
         />
 
@@ -146,21 +146,37 @@ const skillsData = {
 const ConditionalCheckboxes = () => {
   const { watch, control, register } = useFormContext<Skills>();
 
-  if (watch('categories')?.includes('kitchen')) {
+  // when a category is selected, the component is rerendered
+  // so we have an updated array of user-selected categories
+  const selectedCategories = watch('categories');
+
+  // skillsData is then rendered as a checkbox group for each category
+  if (selectedCategories) {
     return (
-      <Controller
-        as={FormInputChoiceBox}
-        name="skills.kitchen"
-        label="Kitchen questions"
-        control={control}
-      >
-        {skillsData.kitchen.map((question, i) => (
-          <Label key={question}>
-            <Checkbox name={`skills.kitchen[${question}]`} ref={register} />
-            {question}
-          </Label>
+      <>
+        {selectedCategories.map((category) => (
+          <Controller
+            as={FormInputChoiceBox}
+            key={category}
+            label={category}
+            control={control}
+            // this template string creates a skill object with each
+            // selected category as properties when the form is submitted
+            name={`skills.${category}`}
+          >
+            {skillsData[category].map((skill) => (
+              <Label key={skill}>
+                <Checkbox
+                  // and a skill property under the category
+                  name={`skills[${category}][${skill}]`}
+                  ref={register}
+                />
+                {skill}
+              </Label>
+            ))}
+          </Controller>
         ))}
-      </Controller>
+      </>
     );
   }
 
