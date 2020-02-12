@@ -13,6 +13,7 @@ import {
 } from './FormComponents';
 import FormNavButton from './FormNavButton';
 import { useFormContext, Controller } from 'react-hook-form';
+import isEmpty from 'lodash/isEmpty';
 
 type Categories = 'kitchen' | 'maintenance' | 'technology' | 'accounting';
 type SelectedSkills = Partial<{ [K in Categories]: Record<string, boolean> }>;
@@ -33,9 +34,10 @@ export const skillSchema = yup.object().shape({
       // This is the whole form object that comes to the validation
       const formData = this?.options?.context as Skills;
 
-      // TODO: validate when no category is selected
-      // validation depends on the shape returned by react-hook-form
-      // eg. no field at all vs `field: something`
+      // when no category is selected, skills should be undefined
+      if (isEmpty(formData.categories)) {
+        return skills === undefined;
+      }
 
       // the skills object should contain only and exactly the keys
       // that are selected in categories
@@ -92,7 +94,8 @@ const FormPageSkills = () => {
           name="consent"
           options={[
             {
-              label: 'I consent to being contacted by committees',
+              label:
+                'I consent to being contacted by committees for recruitment purposes',
             },
           ]}
         />
@@ -135,6 +138,11 @@ const skillsData = {
   accounting: ['accounting', 'bookkeeping', 'etc'],
 };
 
+/**
+ * Skill selection checkboxes that appear when a category is selected
+ * A `react-hook-form` Controller is used to register the checkbox group
+ * as the component mounts. The checkboxes themselves are registered directly.
+ */
 const ConditionalCheckboxes = () => {
   const { watch, control, register } = useFormContext<Skills>();
 
