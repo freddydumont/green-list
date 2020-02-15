@@ -19,11 +19,13 @@ type Categories = 'kitchen' | 'maintenance' | 'technology' | 'accounting';
 type SelectedSkills = Partial<{ [K in Categories]: Record<string, boolean> }>;
 
 export const skillSchema = yup.object().shape({
-  categories: yup.array(
-    yup
-      .mixed<Categories>()
-      .oneOf(['kitchen', 'maintenance', 'technology', 'accounting'])
-  ),
+  categories: yup
+    .array(
+      yup
+        .mixed<Categories>()
+        .oneOf(['kitchen', 'maintenance', 'technology', 'accounting'])
+    )
+    .required(),
   skills: yup
     .mixed<SelectedSkills>()
     .notRequired()
@@ -51,6 +53,54 @@ export const skillSchema = yup.object().shape({
 
 export type Skills = yup.InferType<typeof skillSchema>;
 
+const skillResolver = (formValues: Skills) => {
+  // the resolver is triggered before onChange actually fires,
+  // so <ConditionalCheckboxes /> and the skills object
+  // don't exist when we get here on `reValidate`
+  // if that happens, we ignore the validation
+  if (!isEmpty(formValues.categories) && formValues.skills === undefined) {
+    return {
+      values: formValues,
+      errors: {},
+    };
+  }
+
+  try {
+    // we need to validate with context to work with our custom
+    // skills validation in the schema
+    const values = skillSchema.validateSync(formValues, {
+      abortEarly: false,
+      context: formValues,
+    });
+
+    return {
+      values,
+      errors: {},
+    };
+  } catch (error) {
+    // if there is a validation error, we return it in a format that is
+    // understood by react-hook-form
+    // https://react-hook-form.com/api#validationResolver
+    return {
+      values: error ? error.value : {},
+      errors: error
+        ? error.inner?.reduce(
+            (
+              previous: {} | yup.ValidationError,
+              currentError: yup.ValidationError
+            ) => {
+              return {
+                ...previous,
+                [currentError.path]: currentError,
+              };
+            },
+            {}
+          )
+        : {},
+    };
+  }
+};
+
 const FormPageSkills = () => {
   // const service = useContext(ServiceContext);
   // const [state, send] = useService(service);
@@ -71,8 +121,11 @@ const FormPageSkills = () => {
       title="Interests and skills"
       description="Choose your areas of interests in Dhamma service and select your skills if applicable"
     >
-      <Form<Skills> onSubmit={onSubmit}>
-        {/* validationSchema={skillSchema} */}
+      <Form<Skills>
+        onSubmit={onSubmit}
+        validationSchema={skillSchema}
+        validationResolver={skillResolver}
+      >
         <FormInputChoice
           type="checkbox"
           label="Areas of interest"
@@ -134,7 +187,13 @@ const skillsData = {
     'architecture',
     'etc',
   ],
-  technology: ['sysadmin', 'software development', 'tech support', 'etc'],
+  technology: [
+    'sysadmin',
+    'software development',
+    'tech support',
+    'networking',
+    'etc',
+  ],
   accounting: ['accounting', 'bookkeeping', 'etc'],
 };
 

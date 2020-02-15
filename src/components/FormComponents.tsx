@@ -4,6 +4,8 @@ import {
   FieldError,
   ErrorMessage,
   FormContext,
+  ValidationResolver,
+  NestDataObject,
 } from 'react-hook-form';
 import {
   Flex,
@@ -25,22 +27,29 @@ interface Props<T> {
   children: JSX.Element[] | JSX.Element;
   /** Function called when form is submitted */
   onSubmit: (data: T) => void;
-  /** TODO: remove optional when done developing form */
-  validationSchema?: Schema<T>;
+  validationSchema: Schema<T>;
+  validationResolver?: (
+    values: T,
+    validationContext?: object
+  ) => {
+    values: {} | T;
+    errors: {} | NestDataObject<T>;
+  };
 }
 
 /**
  * [Smart form component](https://react-hook-form.com/advanced-usage#SmartFormComponent).
  * Passes `react-hook-form` methods to children.
- *
  */
 export function Form<FormData>({
   children,
   onSubmit,
   validationSchema,
+  validationResolver,
 }: Props<FormData>) {
   const methods = useForm<FormData>({
     validationSchema,
+    validationResolver: validationResolver as ValidationResolver,
   });
 
   return (
