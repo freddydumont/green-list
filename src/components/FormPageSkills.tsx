@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 import FormPageLayout from './FormPageLayout';
 import { Divider, Flex, Label, Checkbox } from '@theme-ui/components';
-// import { useContext } from 'react';
-// import { useService } from '@xstate/react';
-// import { ServiceContext } from '../pages';
+import { useContext } from 'react';
+import { useService } from '@xstate/react';
+import { ServiceContext } from '../pages';
 import isEqual from 'lodash/isEqual';
 import {
   Form,
@@ -102,18 +102,16 @@ const skillResolver = (formValues: Skills) => {
 };
 
 const FormPageSkills = () => {
-  // const service = useContext(ServiceContext);
-  // const [state, send] = useService(service);
+  const service = useContext(ServiceContext);
+  const [, send] = useService(service);
 
   const onSubmit = (data: Skills) => {
-    console.log(JSON.stringify(data, null, 2));
-
-    // send({
-    //   type: 'NEXT',
-    //   data: {
-    //     skills: data,
-    //   },
-    // });
+    send({
+      type: 'NEXT',
+      data: {
+        skills: data,
+      },
+    });
   };
 
   return (

@@ -22,10 +22,9 @@ export default () => {
 
   switch (current.value) {
     case 'home':
-      // page = (
-      //   <FormPageLayout title="Home" description="this is a test description" />
-      // );
-      page = <FormPageSkills />;
+      page = (
+        <FormPageLayout title="Home" description="this is a test description" />
+      );
       break;
 
     case 'info':

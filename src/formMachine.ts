@@ -71,6 +71,7 @@ const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
           NEXT: {
             target: 'availability',
             cond: 'validateFields',
+            actions: assign((ctx, event) => event.data),
           },
         },
       },
@@ -80,6 +81,7 @@ const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
           NEXT: {
             target: 'validation',
             cond: 'validateFields',
+            actions: assign((ctx, event) => event.data),
           },
         },
       },
