@@ -11,6 +11,7 @@ import FormPageLayout from '../components/FormPageLayout';
 import FormPageInfo from '../components/FormPageInfo';
 import FormPageSkills from '../components/FormPageSkills';
 import FormPageAvailability from '../components/FormPageAvailability';
+import { Text } from '@theme-ui/components';
 
 type Service = Interpreter<FormContext, FormStateSchema, FormEvent>;
 
@@ -19,48 +20,41 @@ export const ServiceContext = createContext<Service>({} as Service);
 export default () => {
   const [current, , service] = useMachine(formMachine, { immediate: true });
 
-  let page = null;
-
-  switch (current.value) {
-    case 'home':
-      page = (
-        <FormPageLayout title="Home" description="this is a test description" />
-      );
-      break;
-
-    case 'info':
-      page = <FormPageInfo />;
-      break;
-
-    case 'skills':
-      page = <FormPageSkills />;
-      break;
-    case 'availability':
-      page = <FormPageAvailability />;
-      break;
-    case 'validation':
-      page = (
-        <FormPageLayout
-          title="Validation"
-          description="this is a test description"
-        />
-      );
-      break;
-    case 'confirmation':
-      page = (
-        <FormPageLayout
-          title="Confirmation"
-          description="this is a test description"
-        />
-      );
-      break;
-
-    default:
-      page = null;
-      break;
-  }
-
   return (
-    <ServiceContext.Provider value={service}>{page}</ServiceContext.Provider>
+    <ServiceContext.Provider value={service}>
+      {
+        // this is an object literal that acts as a switch for pages
+        ({
+          home: (
+            <FormPageLayout
+              title="Home"
+              description="this is a test description"
+            />
+          ),
+          info: <FormPageInfo />,
+          skills: <FormPageSkills />,
+          availability: <FormPageAvailability />,
+          validation: (
+            <FormPageLayout
+              title="Validation"
+              description="this is a test description"
+            >
+              <Text sx={{ fontFamily: 'mono' }}>
+                <pre>{JSON.stringify(current.context, null, 2)}</pre>
+              </Text>
+            </FormPageLayout>
+          ),
+          confirmation: (
+            <FormPageLayout
+              title="Confirmation"
+              description="this is a test description"
+            />
+          ),
+          default: null,
+        } as Record<string, React.ReactNode>)[
+          (current.value as string) || 'default'
+        ]
+      }
+    </ServiceContext.Provider>
   );
 };
