@@ -1,6 +1,7 @@
 import { Machine, assign } from 'xstate';
 import { User } from './components/FormPageInfo';
 import { Skills } from './components/FormPageSkills';
+import { Availability } from './components/FormPageAvailability';
 
 export interface FormStateSchema {
   states: {
@@ -23,14 +24,6 @@ export type FormEvent =
   | { type: 'SUBMIT' };
 
 type Language = 'en' | 'fr';
-
-interface Availability {
-  seasonal: boolean;
-  betweenCourses: boolean;
-  onCourses: boolean;
-  dayZero: boolean;
-  remote: boolean;
-}
 
 export interface FormContext {
   lang: Language;
