@@ -1,5 +1,12 @@
 import React from 'react';
-import { useForm, FieldError, ErrorMessage } from 'react-hook-form';
+import {
+  useForm,
+  FieldError,
+  ErrorMessage,
+  FormContext,
+  ValidationResolver,
+  NestDataObject,
+} from 'react-hook-form';
 import {
   Flex,
   Label,
@@ -8,6 +15,7 @@ import {
   Box,
   Checkbox,
   Text,
+  Textarea,
 } from '@theme-ui/components';
 import { Schema } from 'yup';
 import { useMachine } from '@xstate/react';
@@ -20,45 +28,55 @@ interface Props<T> {
   /** Function called when form is submitted */
   onSubmit: (data: T) => void;
   validationSchema: Schema<T>;
+  validationResolver?: (
+    values: T,
+    validationContext?: object
+  ) => {
+    values: {} | T;
+    errors: {} | NestDataObject<T>;
+  };
 }
 
 /**
  * [Smart form component](https://react-hook-form.com/advanced-usage#SmartFormComponent).
  * Passes `react-hook-form` methods to children.
- *
  */
 export function Form<FormData>({
   children,
   onSubmit,
   validationSchema,
+  validationResolver,
 }: Props<FormData>) {
-  const { handleSubmit, register, errors } = useForm<FormData>({
+  const methods = useForm<FormData>({
     validationSchema,
+    validationResolver: validationResolver as ValidationResolver,
   });
 
   return (
-    <Flex
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        flexDirection: 'column',
-      }}
-    >
-      {Array.isArray(children)
-        ? children.map((child) => {
-            return child.props.name
-              ? React.createElement(child.type, {
-                  ...{
-                    ...child.props,
-                    register,
-                    errors,
-                    key: child.props.name,
-                  },
-                })
-              : child;
-          })
-        : children}
-    </Flex>
+    <FormContext {...methods}>
+      <Flex
+        as="form"
+        onSubmit={methods.handleSubmit(onSubmit)}
+        sx={{
+          flexDirection: 'column',
+        }}
+      >
+        {Array.isArray(children)
+          ? children.map((child) => {
+              return child.props.name
+                ? React.createElement(child.type, {
+                    ...{
+                      ...child.props,
+                      register: methods.register,
+                      errors: methods.errors,
+                      key: child.props.name,
+                    },
+                  })
+                : child;
+            })
+          : children}
+      </Flex>
+    </FormContext>
   );
 }
 
@@ -68,12 +86,16 @@ interface FormFieldProps {
   register?: any;
   errors?: Record<string, FieldError>;
   /** Displayed label */
-  label: string;
+  label?: string;
   /** input and label name */
   name: string;
+  /** HTML element to render, defaults to 'input' */
+  as?: 'input' | 'textarea';
 }
 
-type FormInputProps = FormFieldProps & JSX.IntrinsicElements['input'];
+type FormInputProps = FormFieldProps &
+  JSX.IntrinsicElements['input'] &
+  JSX.IntrinsicElements['textarea'];
 
 /**
  * Simple form input with label.
@@ -84,6 +106,7 @@ export function FormField({
   errors,
   name,
   label,
+  as = 'input',
   ...rest
 }: FormInputProps) {
   const [state, send] = useMachine(InputMachine);
@@ -109,15 +132,18 @@ export function FormField({
     } as Record<string, string>)[state as string];
   }
 
+  const props = {
+    variant: getVariant(state.value),
+    ref: register,
+    name,
+    ...rest,
+  };
+
   return (
     <>
       <Label htmlFor={name}>{label}</Label>
-      <Input
-        variant={getVariant(state.value)}
-        name={name}
-        ref={register}
-        {...rest}
-      />
+      {as === 'input' && <Input {...props} />}
+      {as === 'textarea' && <Textarea sx={{ height: 24 }} {...props} />}
       <ErrorMessage
         as={<Text color="textDanger" mb={4} />}
         name={name}
@@ -131,12 +157,10 @@ type FormInputChoiceProps = {
   /** input type */
   type: 'radio' | 'checkbox';
   /** individual options, eg. a single checkbox */
-  options: { label: string; value: string }[];
+  options: { label: string; value?: string }[];
 } & FormInputProps;
 
-/**
- * Radio or checkbox input.
- */
+/** Radio or checkbox input */
 export function FormInputChoice({
   register,
   errors,
@@ -146,11 +170,35 @@ export function FormInputChoice({
   options,
   ...rest
 }: FormInputChoiceProps) {
+  return (
+    <FormInputChoiceBox {...{ errors, name, label }}>
+      {options.map(({ label, value }) => (
+        <Label key={label}>
+          {type === 'radio' && (
+            <Radio name={name} value={value} ref={register} {...rest} />
+          )}
+          {type === 'checkbox' && (
+            <Checkbox name={name} value={value} ref={register} {...rest} />
+          )}
+          {label}
+        </Label>
+      ))}
+    </FormInputChoiceBox>
+  );
+}
+
+/** Presentational layer for FormInputChoice */
+export function FormInputChoiceBox({
+  errors,
+  name,
+  label,
+  children,
+}: FormInputProps) {
   const hasError = errors?.[name];
 
   return (
     <Box variant={hasError ? 'box.formError' : 'box.form'}>
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <Box
         sx={{
           boxShadow: hasError ? 'error' : 'none',
@@ -159,17 +207,7 @@ export function FormInputChoice({
           borderRadius: '4px',
         }}
       >
-        {options.map(({ label, value }) => (
-          <Label key={value}>
-            {type === 'radio' && (
-              <Radio name={name} value={value} ref={register} {...rest} />
-            )}
-            {type === 'checkbox' && (
-              <Checkbox name={name} value={value} ref={register} {...rest} />
-            )}
-            {label}
-          </Label>
-        ))}
+        {children}
       </Box>
       <ErrorMessage
         as={<Text color="textDanger" mb={4} />}
