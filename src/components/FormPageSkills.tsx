@@ -97,6 +97,7 @@ const skillResolver = (formValues: Skills) => {
   }
 };
 
+/** Collect user skills */
 const FormPageSkills = () => {
   const [, send] = useFormService();
 

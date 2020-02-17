@@ -29,6 +29,7 @@ export const userSchema = yup.object().shape({
 
 export type User = yup.InferType<typeof userSchema>;
 
+/** Collect identification and contact information */
 const FormPageInfo = () => {
   const [, send] = useFormService();
 

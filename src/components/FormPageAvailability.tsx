@@ -29,6 +29,10 @@ export const availabilitySchema = yup.object().shape({
 
 export type Availability = yup.InferType<typeof availabilitySchema>;
 
+/**
+ * Collect periods of availability if applicable.
+ * Monthly availability will be collected in the confirmation email.
+ **/
 const FormPageAvailability = () => {
   const [, send] = useFormService();
 

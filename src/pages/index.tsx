@@ -34,6 +34,10 @@ export default () => {
           info: <FormPageInfo />,
           skills: <FormPageSkills />,
           availability: <FormPageAvailability />,
+          /**
+           * Present the whole form for the user to review before final
+           * submission
+           **/
           validation: (
             <FormPageLayout
               title="Validation"
@@ -44,6 +48,7 @@ export default () => {
               </Text>
             </FormPageLayout>
           ),
+          /** Display a confirmation message, return home and wipe the data */
           confirmation: (
             <FormPageLayout
               title="Confirmation"
