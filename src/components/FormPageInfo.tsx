@@ -4,9 +4,7 @@ import { Form, FormField, FormInputChoice } from './FormComponents';
 import { Divider } from '@theme-ui/components';
 import { Flex } from 'theme-ui';
 import FormNavButton from './FormNavButton';
-import { useContext } from 'react';
-import { useService } from '@xstate/react';
-import { ServiceContext } from '../pages';
+import { useFormService } from '../hooks/useFormService';
 
 export const userSchema = yup.object().shape({
   firstName: yup.string().required(),
@@ -32,8 +30,7 @@ export const userSchema = yup.object().shape({
 export type User = yup.InferType<typeof userSchema>;
 
 const FormPageInfo = () => {
-  const service = useContext(ServiceContext);
-  const [, send] = useService(service);
+  const [, send] = useFormService();
 
   const onSubmit = (data: User) => {
     send({

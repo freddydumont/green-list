@@ -1,15 +1,12 @@
 import { Button } from '@theme-ui/components';
-import { useContext } from 'react';
-import { useService } from '@xstate/react';
-import { ServiceContext } from '../pages';
+import { useFormService } from '../hooks/useFormService';
 
 /**
  * Button subscribing to the form state that returns the appropriate value
  * for the current state.
  */
 const FormNavButton = () => {
-  const service = useContext(ServiceContext);
-  const [current, send] = useService(service);
+  const [current, send] = useFormService();
 
   const next = <Button variant="form" as="input" type="submit" value="Next" />;
 

@@ -1,9 +1,6 @@
 import * as yup from 'yup';
 import FormPageLayout from './FormPageLayout';
 import { Divider, Flex, Label, Checkbox } from '@theme-ui/components';
-import { useContext } from 'react';
-import { useService } from '@xstate/react';
-import { ServiceContext } from '../pages';
 import isEqual from 'lodash/isEqual';
 import {
   Form,
@@ -14,6 +11,7 @@ import {
 import FormNavButton from './FormNavButton';
 import { useFormContext, Controller } from 'react-hook-form';
 import isEmpty from 'lodash/isEmpty';
+import { useFormService } from '../hooks/useFormService';
 
 type Categories = 'kitchen' | 'maintenance' | 'technology' | 'accounting';
 type SelectedSkills = Partial<{ [K in Categories]: Record<string, boolean> }>;
@@ -100,8 +98,7 @@ const skillResolver = (formValues: Skills) => {
 };
 
 const FormPageSkills = () => {
-  const service = useContext(ServiceContext);
-  const [, send] = useService(service);
+  const [, send] = useFormService();
 
   const onSubmit = (data: Skills) => {
     send({

@@ -1,12 +1,10 @@
 import * as yup from 'yup';
 import FormPageLayout from './FormPageLayout';
-import { useContext } from 'react';
-import { useService } from '@xstate/react';
-import { ServiceContext } from '../pages';
 import { FormInputChoice, Form } from './FormComponents';
 import { Divider } from '@theme-ui/components';
 import { Flex } from 'theme-ui';
 import FormNavButton from './FormNavButton';
+import { useFormService } from '../hooks/useFormService';
 
 type Availabilities =
   | 'seasonal'
@@ -32,8 +30,7 @@ export const availabilitySchema = yup.object().shape({
 export type Availability = yup.InferType<typeof availabilitySchema>;
 
 const FormPageAvailability = () => {
-  const service = useContext(ServiceContext);
-  const [, send] = useService(service);
+  const [, send] = useFormService();
 
   const onSubmit = (data: Availability) => {
     send({
