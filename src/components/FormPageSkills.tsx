@@ -44,8 +44,6 @@ export const skillSchema = yup.object().shape({
       // the skills object should contain only and exactly the keys
       // that are selected in categories
       return isEqual(Object.keys(skills), formData.categories);
-
-      // TODO: add validation for skills categories objects?
     }),
   other: yup.string().notRequired(),
   consent: yup.boolean(),
@@ -150,8 +148,6 @@ const FormPageSkills = () => {
             },
           ]}
         />
-
-        <input type="submit" />
 
         <Divider mx={0} mt={0} mb={4} />
         <Flex
