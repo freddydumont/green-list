@@ -29,7 +29,7 @@ export interface FormContext {
   lang: Language;
   user: User;
   skills: Skills;
-  availability: Availability;
+  availability: Availability['availability'];
 }
 
 const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
