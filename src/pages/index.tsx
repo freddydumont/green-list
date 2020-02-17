@@ -10,6 +10,7 @@ import {
 import FormPageLayout from '../components/FormPageLayout';
 import FormPageInfo from '../components/FormPageInfo';
 import FormPageSkills from '../components/FormPageSkills';
+import FormPageAvailability from '../components/FormPageAvailability';
 
 type Service = Interpreter<FormContext, FormStateSchema, FormEvent>;
 
@@ -35,12 +36,7 @@ export default () => {
       page = <FormPageSkills />;
       break;
     case 'availability':
-      page = (
-        <FormPageLayout
-          title="Availability"
-          description="this is a test description"
-        />
-      );
+      page = <FormPageAvailability />;
       break;
     case 'validation':
       page = (
