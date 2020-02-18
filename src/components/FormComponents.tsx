@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import {
   useForm,
-  FieldError,
   ErrorMessage,
   FormContext,
   ValidationResolver,
   NestDataObject,
+  useFormContext,
 } from 'react-hook-form';
 import {
   Flex,
@@ -61,30 +62,13 @@ export function Form<FormData>({
           flexDirection: 'column',
         }}
       >
-        {Array.isArray(children)
-          ? children.map((child) => {
-              return child.props.name
-                ? React.createElement(child.type, {
-                    ...{
-                      ...child.props,
-                      register: methods.register,
-                      errors: methods.errors,
-                      key: child.props.name,
-                    },
-                  })
-                : child;
-            })
-          : children}
+        {children}
       </Flex>
     </FormContext>
   );
 }
 
 interface FormFieldProps {
-  /** The Form component provides this prop */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register?: any;
-  errors?: Record<string, FieldError>;
   /** Displayed label */
   label?: string;
   /** input and label name */
@@ -102,14 +86,13 @@ type FormInputProps = FormFieldProps &
  * Tracks its state explicitely via xstate to know when valid state is reached.
  */
 export function FormField({
-  register,
-  errors,
   name,
   label,
   as = 'input',
   ...rest
 }: FormInputProps) {
   const [state, send] = useMachine(InputMachine);
+  const { register, errors } = useFormContext();
 
   // if errors is not empty, form has been validated
   // so input has to be in either valid or error state
@@ -134,7 +117,7 @@ export function FormField({
 
   const props = {
     variant: getVariant(state.value),
-    ref: register,
+    ref: register as any,
     name,
     ...rest,
   };
@@ -162,23 +145,26 @@ type FormInputChoiceProps = {
 
 /** Radio or checkbox input */
 export function FormInputChoice({
-  register,
-  errors,
   type,
   name,
   label,
   options,
   ...rest
 }: FormInputChoiceProps) {
+  const { register, errors } = useFormContext();
+
+  const props = {
+    name,
+    ref: register as any,
+  };
+
   return (
     <FormInputChoiceBox {...{ errors, name, label }}>
       {options.map(({ label, value }) => (
         <Label key={label}>
-          {type === 'radio' && (
-            <Radio name={name} value={value} ref={register} {...rest} />
-          )}
+          {type === 'radio' && <Radio value={value} {...props} {...rest} />}
           {type === 'checkbox' && (
-            <Checkbox name={name} value={value} ref={register} {...rest} />
+            <Checkbox value={value} {...props} {...rest} />
           )}
           {label}
         </Label>
@@ -188,12 +174,8 @@ export function FormInputChoice({
 }
 
 /** Presentational layer for FormInputChoice */
-export function FormInputChoiceBox({
-  errors,
-  name,
-  label,
-  children,
-}: FormInputProps) {
+export function FormInputChoiceBox({ name, label, children }: FormInputProps) {
+  const { errors } = useFormContext();
   const hasError = errors?.[name];
 
   return (
