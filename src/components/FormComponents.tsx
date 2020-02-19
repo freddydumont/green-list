@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   useForm,
   ErrorMessage,
@@ -23,6 +23,8 @@ import { useMachine } from '@xstate/react';
 import { InputMachine } from '../inputMachine';
 import isEmpty from 'lodash/isEmpty';
 import { StateValue } from 'xstate';
+import { useFormService } from '../hooks/useFormService';
+import { FormContext as FormStateContext } from '../formMachine';
 
 interface Props<T> {
   children: JSX.Element[] | JSX.Element;
@@ -52,6 +54,21 @@ export function Form<FormData>({
     validationSchema,
     validationResolver: validationResolver as ValidationResolver,
   });
+
+  // value and context fields match so we can use both together to retrieve
+  // the current form state
+  const [{ value, context }] = useFormService();
+  const formState = context?.[value as Exclude<keyof FormStateContext, 'lang'>];
+
+  // useCallback is needed to avoid infinite rerenders in useEffect
+  const retrieveFormState = useCallback(() => {
+    if (formState) {
+      methods.reset((formState as unknown) as FormData);
+    }
+  }, [formState, methods]);
+
+  // this now acts as componentDidMount, so it fires only once
+  useEffect(retrieveFormState, []);
 
   return (
     <FormContext {...methods}>

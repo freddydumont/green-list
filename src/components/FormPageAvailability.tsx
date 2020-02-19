@@ -40,9 +40,7 @@ const FormPageAvailability = () => {
     send({
       type: 'NEXT',
       data: {
-        // there's a single field in this form, so we don't need the object
-        // to wrap in the data
-        availability: data.availability,
+        availability: data,
       },
     });
   };

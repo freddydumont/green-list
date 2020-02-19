@@ -13,7 +13,8 @@ export const userSchema = yup.object().shape({
     .string()
     .email()
     .required(),
-  dateOfBirth: yup.date().required(),
+  // TODO: add validation pattern to string
+  dateOfBirth: yup.string().required(),
   gender: yup
     .mixed<'male' | 'female'>()
     .oneOf(['male', 'female'])
@@ -37,7 +38,7 @@ const FormPageInfo = () => {
     send({
       type: 'NEXT',
       data: {
-        user: data,
+        info: data,
       },
     });
   };
