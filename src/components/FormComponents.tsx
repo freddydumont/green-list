@@ -4,7 +4,6 @@ import {
   useForm,
   ErrorMessage,
   FormContext,
-  ValidationResolver,
   NestDataObject,
   useFormContext,
 } from 'react-hook-form';
@@ -52,7 +51,7 @@ export function Form<FormData>({
 }: Props<FormData>) {
   const methods = useForm<FormData>({
     validationSchema,
-    validationResolver: validationResolver as ValidationResolver,
+    validationResolver,
   });
 
   // value and context fields match so we can use both together to retrieve
