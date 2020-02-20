@@ -7,6 +7,7 @@ import FormNavButton from './FormNavButton';
 import { useFormService } from '../hooks/useFormService';
 
 export const userSchema = yup.object().shape({
+  _hidden: yup.mixed().required(),
   firstName: yup.string().required(),
   lastName: yup.string().required(),
   email: yup

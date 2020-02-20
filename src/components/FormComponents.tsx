@@ -63,6 +63,13 @@ export function Form<FormData>({
   const retrieveFormState = useCallback(() => {
     if (formState) {
       methods.reset((formState as unknown) as FormData);
+
+      // FIXME: triggerValidation should validate the whole form when called
+      // without args. it doesn't but validating a single input somewhow does
+      // ¯\_(ツ)_/¯
+      // so this is a hack that should be fixed if the problem is ever
+      // addressed upstream
+      methods.triggerValidation('_hidden');
     }
   }, [formState, methods]);
 
@@ -78,6 +85,7 @@ export function Form<FormData>({
           flexDirection: 'column',
         }}
       >
+        <input type="hidden" name="_hidden" ref={methods.register} />
         {children}
       </Flex>
     </FormContext>

@@ -22,6 +22,7 @@ const availabilities: Availabilities[] = [
 ];
 
 export const availabilitySchema = yup.object().shape({
+  _hidden: yup.mixed().required(),
   availability: yup
     .array(yup.mixed<Availabilities>().oneOf(availabilities))
     .required(),
