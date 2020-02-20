@@ -1,11 +1,11 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useCallback } from 'react';
 import {
   useForm,
-  FieldError,
   ErrorMessage,
   FormContext,
-  ValidationResolver,
   NestDataObject,
+  useFormContext,
 } from 'react-hook-form';
 import {
   Flex,
@@ -22,6 +22,8 @@ import { useMachine } from '@xstate/react';
 import { InputMachine } from '../inputMachine';
 import isEmpty from 'lodash/isEmpty';
 import { StateValue } from 'xstate';
+import { useFormService } from '../hooks/useFormService';
+import { FormContext as FormStateContext } from '../formMachine';
 
 interface Props<T> {
   children: JSX.Element[] | JSX.Element;
@@ -49,8 +51,30 @@ export function Form<FormData>({
 }: Props<FormData>) {
   const methods = useForm<FormData>({
     validationSchema,
-    validationResolver: validationResolver as ValidationResolver,
+    validationResolver,
   });
+
+  // value and context fields match so we can use both together to retrieve
+  // the current form state
+  const [{ value, context }] = useFormService();
+  const formState = context?.[value as Exclude<keyof FormStateContext, 'lang'>];
+
+  // useCallback is needed to avoid infinite rerenders in useEffect
+  const retrieveFormState = useCallback(() => {
+    if (formState) {
+      methods.reset((formState as unknown) as FormData);
+
+      // FIXME: triggerValidation should validate the whole form when called
+      // without args. it doesn't but validating a single input somewhow does
+      // ¯\_(ツ)_/¯
+      // so this is a hack that should be fixed if the problem is ever
+      // addressed upstream
+      methods.triggerValidation('_hidden');
+    }
+  }, [formState, methods]);
+
+  // this now acts as componentDidMount, so it fires only once
+  useEffect(retrieveFormState, []);
 
   return (
     <FormContext {...methods}>
@@ -61,30 +85,14 @@ export function Form<FormData>({
           flexDirection: 'column',
         }}
       >
-        {Array.isArray(children)
-          ? children.map((child) => {
-              return child.props.name
-                ? React.createElement(child.type, {
-                    ...{
-                      ...child.props,
-                      register: methods.register,
-                      errors: methods.errors,
-                      key: child.props.name,
-                    },
-                  })
-                : child;
-            })
-          : children}
+        <input type="hidden" name="_hidden" ref={methods.register} />
+        {children}
       </Flex>
     </FormContext>
   );
 }
 
 interface FormFieldProps {
-  /** The Form component provides this prop */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register?: any;
-  errors?: Record<string, FieldError>;
   /** Displayed label */
   label?: string;
   /** input and label name */
@@ -102,14 +110,13 @@ type FormInputProps = FormFieldProps &
  * Tracks its state explicitely via xstate to know when valid state is reached.
  */
 export function FormField({
-  register,
-  errors,
   name,
   label,
   as = 'input',
   ...rest
 }: FormInputProps) {
   const [state, send] = useMachine(InputMachine);
+  const { register, errors } = useFormContext();
 
   // if errors is not empty, form has been validated
   // so input has to be in either valid or error state
@@ -134,7 +141,7 @@ export function FormField({
 
   const props = {
     variant: getVariant(state.value),
-    ref: register,
+    ref: register as any,
     name,
     ...rest,
   };
@@ -162,23 +169,26 @@ type FormInputChoiceProps = {
 
 /** Radio or checkbox input */
 export function FormInputChoice({
-  register,
-  errors,
   type,
   name,
   label,
   options,
   ...rest
 }: FormInputChoiceProps) {
+  const { register, errors } = useFormContext();
+
+  const props = {
+    name,
+    ref: register as any,
+  };
+
   return (
     <FormInputChoiceBox {...{ errors, name, label }}>
       {options.map(({ label, value }) => (
         <Label key={label}>
-          {type === 'radio' && (
-            <Radio name={name} value={value} ref={register} {...rest} />
-          )}
+          {type === 'radio' && <Radio value={value} {...props} {...rest} />}
           {type === 'checkbox' && (
-            <Checkbox name={name} value={value} ref={register} {...rest} />
+            <Checkbox value={value} {...props} {...rest} />
           )}
           {label}
         </Label>
@@ -188,12 +198,8 @@ export function FormInputChoice({
 }
 
 /** Presentational layer for FormInputChoice */
-export function FormInputChoiceBox({
-  errors,
-  name,
-  label,
-  children,
-}: FormInputProps) {
+export function FormInputChoiceBox({ name, label, children }: FormInputProps) {
+  const { errors } = useFormContext();
   const hasError = errors?.[name];
 
   return (

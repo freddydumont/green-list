@@ -17,13 +17,12 @@ type Categories = 'kitchen' | 'maintenance' | 'technology' | 'accounting';
 type SelectedSkills = Partial<{ [K in Categories]: Record<string, boolean> }>;
 
 export const skillSchema = yup.object().shape({
-  categories: yup
-    .array(
-      yup
-        .mixed<Categories>()
-        .oneOf(['kitchen', 'maintenance', 'technology', 'accounting'])
-    )
-    .required(),
+  _hidden: yup.mixed().required(),
+  categories: yup.array(
+    yup
+      .mixed<Categories>()
+      .oneOf(['kitchen', 'maintenance', 'technology', 'accounting'])
+  ),
   skills: yup
     .mixed<SelectedSkills>()
     .notRequired()

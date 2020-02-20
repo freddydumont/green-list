@@ -7,13 +7,15 @@ import FormNavButton from './FormNavButton';
 import { useFormService } from '../hooks/useFormService';
 
 export const userSchema = yup.object().shape({
+  _hidden: yup.mixed().required(),
   firstName: yup.string().required(),
   lastName: yup.string().required(),
   email: yup
     .string()
     .email()
     .required(),
-  dateOfBirth: yup.date().required(),
+  // TODO: add validation pattern to string
+  dateOfBirth: yup.string().required(),
   gender: yup
     .mixed<'male' | 'female'>()
     .oneOf(['male', 'female'])
@@ -37,7 +39,7 @@ const FormPageInfo = () => {
     send({
       type: 'NEXT',
       data: {
-        user: data,
+        info: data,
       },
     });
   };

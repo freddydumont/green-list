@@ -11,14 +11,15 @@ import FormPageLayout from '../components/FormPageLayout';
 import FormPageInfo from '../components/FormPageInfo';
 import FormPageSkills from '../components/FormPageSkills';
 import FormPageAvailability from '../components/FormPageAvailability';
-import { Text } from '@theme-ui/components';
+import { Text, Button } from '@theme-ui/components';
+import FormNavButton from '../components/FormNavButton';
 
 type Service = Interpreter<FormContext, FormStateSchema, FormEvent>;
 
 export const ServiceContext = createContext<Service>({} as Service);
 
 export default () => {
-  const [current, , service] = useMachine(formMachine, { immediate: true });
+  const [current, send, service] = useMachine(formMachine, { immediate: true });
 
   return (
     <ServiceContext.Provider value={service}>
@@ -29,7 +30,22 @@ export default () => {
             <FormPageLayout
               title="Home"
               description="this is a test description"
-            />
+            >
+              <>
+                <Button
+                  variant="form"
+                  onClick={() => send({ type: 'START', lang: 'en' })}
+                >
+                  Continue in English
+                </Button>
+                <Button
+                  variant="form"
+                  onClick={() => send({ type: 'START', lang: 'fr' })}
+                >
+                  Continuer en français
+                </Button>
+              </>
+            </FormPageLayout>
           ),
           info: <FormPageInfo />,
           skills: <FormPageSkills />,
@@ -46,6 +62,7 @@ export default () => {
               <Text sx={{ fontFamily: 'mono' }}>
                 <pre>{JSON.stringify(current.context, null, 2)}</pre>
               </Text>
+              <FormNavButton />
             </FormPageLayout>
           ),
           /** Display a confirmation message, return home and wipe the data */

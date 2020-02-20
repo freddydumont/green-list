@@ -17,24 +17,6 @@ const FormNavButton = () => {
   );
 
   switch (current.value) {
-    case 'home':
-      return (
-        <>
-          <Button
-            variant="form"
-            onClick={() => send({ type: 'START', lang: 'en' })}
-          >
-            Continue in English
-          </Button>
-          <Button
-            variant="form"
-            onClick={() => send({ type: 'START', lang: 'fr' })}
-          >
-            Continuer en français
-          </Button>
-        </>
-      );
-
     case 'info':
     case 'skills':
     case 'availability':

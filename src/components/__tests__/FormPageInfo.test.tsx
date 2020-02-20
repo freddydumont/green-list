@@ -15,6 +15,7 @@ describe('userSchema', () => {
     expect.assertions(1);
     return expect(
       userSchema.isValid({
+        _hidden: '',
         contactPreference: ['email', 'phone'],
         phone: '555-555-5555',
         location: 'Levis',

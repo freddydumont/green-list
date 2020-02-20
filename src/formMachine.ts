@@ -27,9 +27,9 @@ type Language = 'en' | 'fr';
 
 export interface FormContext {
   lang: Language;
-  user: User;
+  info: User;
   skills: Skills;
-  availability: Availability['availability'];
+  availability: Availability;
 }
 
 const formMachine = Machine<FormContext, FormStateSchema, FormEvent>(
