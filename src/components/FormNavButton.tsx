@@ -11,7 +11,13 @@ const FormNavButton = () => {
   const next = <Button variant="form" as="input" type="submit" value="Next" />;
 
   const previous = (
-    <Button variant="outline" mr={2} onClick={() => send({ type: 'PREVIOUS' })}>
+    <Button
+      // type prevents button from being clicked when pressing enter
+      type="button"
+      variant="outline"
+      mr={2}
+      onClick={() => send({ type: 'PREVIOUS' })}
+    >
       Previous
     </Button>
   );
