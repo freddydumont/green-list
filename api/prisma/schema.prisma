@@ -9,7 +9,7 @@ model User {
     last_name      String?
     date_of_birth   DateTime?
     gender  GenderEnum
-    hometown HomeTown
+    hometown String
 //    hometown HomeTown
     phone_number String?
     email     String   @unique
