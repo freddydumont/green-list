@@ -18,5 +18,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'lodash/prefer-lodash-method': 'off',
+    'lodash/prefer-constant': 'off',
   },
 };
