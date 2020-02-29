@@ -10,6 +10,7 @@ model User {
     date_of_birth   DateTime?
     gender  GenderEnum
     hometown HomeTown
+//    hometown HomeTown
     phone_number String?
     email     String   @unique
     contact_by ContactBy
