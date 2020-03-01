@@ -5,36 +5,21 @@ datasource sqlite {
 
 model User {
     id        Int      @id @default(autoincrement())
-    full_name      String?
-    last_name      String?
-    date_of_birth   DateTime?
-    gender  GenderEnum
-    hometown String
-//    hometown HomeTown
+    full_name      String
+    last_name      String
+    date_of_birth   DateTime
+    gender  Gender
+    hometown HomeTown
     phone_number String?
     email     String   @unique
     contact_by ContactBy
     consent_to_contact Boolean @default(false)
+    availability Availability[]
+    other_skill String?
+    skill Skill[]
 }
 
-model UserAvailabilites {
-    id        Int      @id @default(autoincrement())
-    user User
-    availabilities Availabilities[]
-}
-
-model Availabilities {
-    id        Int      @id @default(autoincrement())
-    availability String @unique
-}
-
-model UserSkills {
-    id        Int      @id @default(autoincrement())
-    user User
-    skills Skills[]
-}
-
-model Skills {
+model Skill {
     id        Int      @id @default(autoincrement())
     interest Interest[]
     skill String
@@ -43,17 +28,20 @@ model Skills {
 model Interest {
     id        Int      @id @default(autoincrement())
     interest String @unique
+    skill Skill[]
 }
-
 
 model HomeTown {
     id        Int      @id @default(autoincrement())
-    city String
-    province String
-    country String @unique
+    hometown String @unique
 }
 
-enum GenderEnum {
+model Availability {
+    id        Int      @id @default(autoincrement())
+    availability String @unique
+}
+
+enum Gender {
     Male
     Female
 }
