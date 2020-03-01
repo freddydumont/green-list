@@ -11,47 +11,48 @@ generator client {
 }
 
 model User {
-  id                 Int            @id @default(autoincrement())
-  first_name         String
-  last_name          String
-  date_of_birth      DateTime
-  gender             Gender
-  hometown           HomeTown
-  phone_number       String?
-  email              String         @unique
-  contact_by         ContactBy
-  consent_to_contact Boolean        @default(false)
-  availability       Availability[]
-  other_skill        String?
-  skill              Skill[]
+  id                          Int            @id @default(autoincrement())
+  createdAt                   DateTime       @default(now())
+  updatedAt                   DateTime       @updatedAt
+  firstName                   String
+  lastName                    String
+  dateOfBirth                 DateTime
+  gender                      Gender
+  location                    String
+  phone                       String?
+  email                       String         @unique
+  contactPreference           ContactBy
+  skillDomains                SkillDomain[]
+  skills                      Skill[]
+  otherSkills                 String?
+  availabilities              Availability[]
+  committeeRecruitmentConsent Boolean        @default(false)
+}
+
+model SkillDomain {
+  id     Int     @id @default(autoincrement())
+  domain String  @unique
+  skills Skill[]
+  users  User[]
 }
 
 model Skill {
-  id       Int        @id @default(autoincrement())
-  interest Interest[]
-  skill    String
-}
-
-model Interest {
-  id       Int     @id @default(autoincrement())
-  interest String  @unique
-  skill    Skill[]
-}
-
-model HomeTown {
-  id       Int    @id @default(autoincrement())
-  hometown String @unique
+  id     Int         @id @default(autoincrement())
+  skill  String      @unique
+  domain SkillDomain
+  users  User[]
 }
 
 model Availability {
   id           Int    @id @default(autoincrement())
   availability String @unique
+  users        User[]
 }
 
 enum Gender {
-  Male Female
+  male female
 }
 
 enum ContactBy {
-  Email Phone Sms
+  email phone text
 }
